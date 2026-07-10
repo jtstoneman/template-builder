@@ -1,0 +1,14 @@
+# Render blueprint: deploy the read-only public demo straight from GitHub.
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: template-builder-demo
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /api/config
+    envVars:
+      - key: TB_WORKSPACE
+        value: /app/examples
+      - key: TB_READ_ONLY
+        value: "1"

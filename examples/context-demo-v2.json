@@ -1,0 +1,527 @@
+{
+  "doc_type": "Confidentiality Agreement",
+  "variables": [
+    {
+      "name": "party_a_name",
+      "type": "string",
+      "question": "What is the full legal name of the first party (the disclosing party in a one-way NDA)?",
+      "choices": []
+    },
+    {
+      "name": "party_a_short_name",
+      "type": "string",
+      "question": "What defined short name is used for the first party (e.g., 'Meridian', or 'Discloser')?",
+      "choices": []
+    },
+    {
+      "name": "party_a_description",
+      "type": "string",
+      "question": "How is the first party described (e.g., 'a Delaware corporation')?",
+      "choices": []
+    },
+    {
+      "name": "party_a_address",
+      "type": "string",
+      "question": "What is the principal place of business of the first party (leave blank if not stated)?",
+      "choices": []
+    },
+    {
+      "name": "party_b_name",
+      "type": "string",
+      "question": "What is the full legal name of the second party (the receiving party in a one-way NDA)?",
+      "choices": []
+    },
+    {
+      "name": "party_b_short_name",
+      "type": "string",
+      "question": "What defined short name is used for the second party (e.g., 'Callowhill', or 'Recipient')?",
+      "choices": []
+    },
+    {
+      "name": "party_b_description",
+      "type": "string",
+      "question": "How is the second party described (e.g., 'a Delaware limited liability company')?",
+      "choices": []
+    },
+    {
+      "name": "party_b_address",
+      "type": "string",
+      "question": "What is the principal place of business of the second party (leave blank if not stated)?",
+      "choices": []
+    },
+    {
+      "name": "effective_date",
+      "type": "string",
+      "question": "What is the effective date of the Agreement?",
+      "choices": []
+    },
+    {
+      "name": "purpose_description",
+      "type": "string",
+      "question": "How is the Purpose described (e.g., 'a potential business relationship relating to data analytics services')?",
+      "choices": []
+    },
+    {
+      "name": "disclosure_direction",
+      "type": "choice",
+      "question": "Is confidential information disclosed by both parties (mutual) or only by one party (one-way)?",
+      "choices": [
+        "mutual",
+        "one-way"
+      ]
+    },
+    {
+      "name": "governing_law_state",
+      "type": "string",
+      "question": "Which U.S. state's law governs the Agreement and provides the forum for disputes?",
+      "choices": []
+    },
+    {
+      "name": "term_years",
+      "type": "number",
+      "question": "How many years does the Agreement remain in effect (the term, before survival of obligations)?",
+      "choices": []
+    },
+    {
+      "name": "confidentiality_survival_years",
+      "type": "number",
+      "question": "For how many years after termination/expiry do the confidentiality obligations survive?",
+      "choices": []
+    },
+    {
+      "name": "include_non_solicitation",
+      "type": "boolean",
+      "question": "Should the Agreement include a Non-Solicitation clause (e.g., where key-personnel sensitivity exists)?",
+      "choices": []
+    },
+    {
+      "name": "include_residuals",
+      "type": "boolean",
+      "question": "Should the Agreement include a Residuals carve-out clause?",
+      "choices": []
+    },
+    {
+      "name": "include_return_destruction",
+      "type": "boolean",
+      "question": "Should the Agreement include a Return or Destruction of Materials clause?",
+      "choices": []
+    },
+    {
+      "name": "require_destruction_certification",
+      "type": "boolean",
+      "question": "Must the receiving party provide written certification of destruction of confidential materials?",
+      "choices": []
+    },
+    {
+      "name": "confidential_information_examples",
+      "type": "string",
+      "question": "What illustrative categories of Confidential Information should be listed (comma-separated, e.g., 'business plans, financial information, customer lists, pricing, product roadmaps, technical data, software, source code, algorithms, trade secrets')?",
+      "choices": []
+    },
+    {
+      "name": "non_solicitation_months",
+      "type": "number",
+      "question": "For how many months after disclosure of personnel-identifying Confidential Information does the non-solicitation restriction apply?",
+      "choices": []
+    },
+    {
+      "name": "allow_assignment_to_successor",
+      "type": "boolean",
+      "question": "Should the no-assignment restriction include a carve-out permitting assignment to a successor in connection with a merger or sale of substantially all assets?",
+      "choices": []
+    },
+    {
+      "name": "party_a_signatory_name",
+      "type": "string",
+      "question": "What is the name of the individual signing on behalf of the first party?",
+      "choices": []
+    },
+    {
+      "name": "party_a_signatory_title",
+      "type": "string",
+      "question": "What is the title of the individual signing on behalf of the first party?",
+      "choices": []
+    },
+    {
+      "name": "party_b_signatory_name",
+      "type": "string",
+      "question": "What is the name of the individual signing on behalf of the second party?",
+      "choices": []
+    },
+    {
+      "name": "party_b_signatory_title",
+      "type": "string",
+      "question": "What is the title of the individual signing on behalf of the second party?",
+      "choices": []
+    }
+  ],
+  "clauses": [
+    {
+      "id": "preamble",
+      "heading": "Preamble and Purpose",
+      "variants": [
+        {
+          "id": "preamble-mutual",
+          "text": "This Mutual Non-Disclosure Agreement (this \"Agreement\") is made effective as of {{effective_date}} (the \"Effective Date\"), by and between {{party_a_name}}, {{party_a_description}} with its principal place of business at {{party_a_address}} (\"{{party_a_short_name}}\"), and {{party_b_name}}, {{party_b_description}} with its principal place of business at {{party_b_address}} (\"{{party_b_short_name}}\"). {{party_a_short_name}} and {{party_b_short_name}} are each a \"Party\" and together the \"Parties.\"\n\nThe Parties wish to explore {{purpose_description}} (the \"Purpose\"), in connection with which each Party may disclose to the other certain confidential and proprietary information, and therefore agree as follows.",
+          "when": "disclosure_direction == \"mutual\"",
+          "provenance": [
+            "nda_01.txt",
+            "nda_10.txt"
+          ]
+        },
+        {
+          "id": "preamble-one-way",
+          "text": "This Non-Disclosure Agreement (this \"Agreement\") is entered into and made effective as of {{effective_date}} (the \"Effective Date\"), by and between {{party_a_name}}, {{party_a_description}} with its principal place of business at {{party_a_address}} (the \"{{party_a_short_name}}\"), and {{party_b_name}}, {{party_b_description}} with its principal place of business at {{party_b_address}} (the \"{{party_b_short_name}}\"). The {{party_a_short_name}} and the {{party_b_short_name}} are each a \"Party\" and together the \"Parties.\"\n\nThe Parties wish to explore {{purpose_description}} (the \"Purpose\"), in connection with which the {{party_a_short_name}} may disclose certain confidential information to the {{party_b_short_name}}, and therefore agree as follows.",
+          "when": null,
+          "provenance": [
+            "nda_02.txt",
+            "nda_05.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": []
+    },
+    {
+      "id": "definitions",
+      "heading": "Definitions",
+      "variants": [
+        {
+          "id": "definitions-mutual",
+          "text": "Definitions. \"Confidential Information\" means all non-public information, in any form or medium, disclosed by or on behalf of a Party (the \"Disclosing Party\") to the other Party (the \"Receiving Party\") in connection with the Purpose, whether before or after the Effective Date, that is designated as confidential or that a reasonable person would understand to be confidential given the nature of the information and the circumstances of disclosure, including, without limitation, {{confidential_information_examples}}, and the existence and terms of the Parties' discussions regarding the Purpose.\n\n\"Representatives\" means a Party's directors, officers, partners, employees, attorneys, accountants, and financial advisors who have a need to know Confidential Information in connection with the Purpose.",
+          "when": "disclosure_direction == \"mutual\"",
+          "provenance": [
+            "nda_01.txt",
+            "nda_10.txt",
+            "nda_02.txt"
+          ]
+        },
+        {
+          "id": "definitions-one-way",
+          "text": "Definitions. \"Confidential Information\" means all non-public information, in any form or medium, disclosed by or on behalf of the Discloser to the Recipient, whether before or after the Effective Date, that is designated as confidential or that a reasonable person would understand to be confidential given the nature of the information and the circumstances of disclosure, including, without limitation, {{confidential_information_examples}}, and the existence and terms of the Parties' discussions regarding the Purpose.\n\n\"Representatives\" means a Party's directors, officers, partners, employees, attorneys, accountants, and financial advisors who have a need to know Confidential Information in connection with the Purpose.",
+          "when": null,
+          "provenance": [
+            "nda_02.txt",
+            "nda_05.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": [
+        "Confidential Information",
+        "Disclosing Party",
+        "Receiving Party",
+        "Discloser",
+        "Recipient",
+        "Representatives"
+      ]
+    },
+    {
+      "id": "confidentiality-obligations",
+      "heading": "Confidentiality Obligations",
+      "variants": [
+        {
+          "id": "confidentiality-obligations-default",
+          "text": "The Receiving Party shall: (a) hold the Disclosing Party's Confidential Information in strict confidence and protect it using at least the same degree of care it uses to protect its own confidential information of like kind, and in no event less than reasonable care; (b) use the Confidential Information solely for the Purpose and for no other purpose; and (c) not disclose the Confidential Information to any third party except to its directors, officers, employees, and professional advisors who have a need to know such information for the Purpose and who are bound by confidentiality obligations no less protective than those set forth in this Agreement.\n\nThe Receiving Party shall be responsible for any breach of this Agreement by any such representative to whom it discloses Confidential Information, and shall promptly notify the Disclosing Party in writing of any unauthorized use or disclosure of Confidential Information of which it becomes aware.",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_02.txt",
+            "nda_05.txt",
+            "nda_10.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": []
+    },
+    {
+      "id": "exclusions",
+      "heading": "Exclusions",
+      "variants": [
+        {
+          "id": "exclusions-written-records",
+          "text": "The obligations set forth in {{ref:confidentiality-obligations}} shall not apply to information that the Receiving Party can demonstrate by written records: (a) is or becomes generally known to the public through no act or omission of the Receiving Party or its Representatives; (b) was rightfully in the Receiving Party's possession without restriction prior to disclosure by the Disclosing Party; (c) is rightfully received from a third party without breach of any obligation of confidentiality owed to the Disclosing Party; or (d) is independently developed by the Receiving Party without use of or reference to the Confidential Information.",
+          "when": "disclosure_direction == \"one-way\"",
+          "provenance": [
+            "nda_02.txt",
+            "nda_05.txt"
+          ]
+        },
+        {
+          "id": "exclusions-standard",
+          "text": "The obligations set forth in {{ref:confidentiality-obligations}} shall not apply to information that the Receiving Party can demonstrate: (a) is or becomes generally known to the public through no fault of the Receiving Party; (b) was rightfully in the Receiving Party's possession without restriction prior to disclosure by the Disclosing Party; (c) is rightfully received from a third party without breach of any obligation of confidentiality; or (d) is independently developed by the Receiving Party without use of or reference to the Disclosing Party's Confidential Information.",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_10.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": []
+    },
+    {
+      "id": "compelled-disclosure",
+      "heading": "Compelled Disclosure",
+      "variants": [
+        {
+          "id": "default",
+          "text": "Notwithstanding {{ref:confidentiality-obligations}}, if the Receiving Party is required by law, regulation, or valid order of a court or governmental authority to disclose Confidential Information, it may do so provided that, to the extent legally permitted, it gives the Disclosing Party prompt written notice and reasonably cooperates, at the Disclosing Party's expense, in any effort to seek a protective order or other appropriate remedy. Any such disclosure shall be limited to the portion of the Confidential Information legally required to be disclosed and shall not otherwise relieve the Receiving Party of its obligations under {{ref:confidentiality-obligations}}.",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_02.txt",
+            "nda_05.txt",
+            "nda_10.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": []
+    },
+    {
+      "id": "non-solicitation",
+      "heading": "Non-Solicitation",
+      "variants": [
+        {
+          "id": "non-solicitation-default",
+          "text": "During the term of this Agreement and for {{non_solicitation_months}} months following disclosure of Confidential Information identifying {{party_a_short_name}}'s personnel, but in no event longer than {{non_solicitation_months}} months after the date of {{party_b_short_name}}'s last receipt of Confidential Information, {{party_b_short_name}} shall not, directly or indirectly, solicit for employment or engagement any employee of {{party_a_short_name}} with whom {{party_b_short_name}} came into contact, or of whom {{party_b_short_name}} became aware, in connection with the Purpose.\n\nThe foregoing does not prohibit general solicitations not targeted at {{party_a_short_name}}'s employees, or the hiring of any person who responds to such general solicitations.",
+          "when": null,
+          "provenance": [
+            "nda_02.txt"
+          ]
+        }
+      ],
+      "include_when": "include_non_solicitation",
+      "defines": []
+    },
+    {
+      "id": "residuals",
+      "heading": "Residuals",
+      "variants": [
+        {
+          "id": "residuals-default",
+          "text": "Notwithstanding {{ref:confidentiality-obligations}}, the Receiving Party may use Residuals for any purpose, provided that such use does not infringe the Disclosing Party's patents or copyrights. \"Residuals\" means information in intangible form retained in the unaided memory of the Receiving Party's personnel who have had access to Confidential Information, where such personnel have not intentionally memorized the Confidential Information for the purpose of retaining and using it.\n\nNothing in this Section grants any license under any intellectual property rights of the Disclosing Party.",
+          "when": null,
+          "provenance": [
+            "nda_10.txt"
+          ]
+        }
+      ],
+      "include_when": "include_residuals",
+      "defines": []
+    },
+    {
+      "id": "return-destruction",
+      "heading": "Return or Destruction of Materials",
+      "variants": [
+        {
+          "id": "return-destruction-certified",
+          "text": "Return or Destruction of Materials. Upon the earlier of the Disclosing Party's written request or the termination or expiration of this Agreement, the Receiving Party shall promptly return to the Disclosing Party or, at the Disclosing Party's election, destroy all Confidential Information of the Disclosing Party, including all copies, notes, extracts, summaries, and derivative materials in any medium. If the Receiving Party destroys such Confidential Information, an authorized officer of the Receiving Party shall provide the Disclosing Party with a written certification confirming that such destruction has been completed.\n\nNotwithstanding the foregoing, the Receiving Party may retain one archival copy solely as required by law or for legal compliance purposes, together with copies stored in automatic backup systems, provided that all retained materials shall remain subject to {{ref:confidentiality-obligations}} for so long as they are retained.",
+          "when": "require_destruction_certification",
+          "provenance": [
+            "nda_05.txt",
+            "nda_02.txt"
+          ]
+        },
+        {
+          "id": "return-destruction-default",
+          "text": "Return or Destruction of Materials. Upon termination or expiration of this Agreement or the Disclosing Party's written request, the Receiving Party shall promptly return or, at the Disclosing Party's election, destroy all Confidential Information of the Disclosing Party, including all copies, notes, and derivative materials, and shall certify such return or destruction in writing upon request.\n\nNotwithstanding the foregoing, the Receiving Party may retain one archival copy solely for legal compliance purposes, together with copies stored in automatic backup systems, provided that all retained materials shall remain subject to {{ref:confidentiality-obligations}} for so long as they are retained.",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_02.txt"
+          ]
+        }
+      ],
+      "include_when": "include_return_destruction",
+      "defines": []
+    },
+    {
+      "id": "no-license-no-warranty",
+      "heading": "No License; No Warranty; No Obligation",
+      "variants": [
+        {
+          "id": "one-way",
+          "text": "All Confidential Information remains the sole property of the Discloser. Nothing in this Agreement grants the Recipient any license or other right in or to the Confidential Information or intellectual property of the Discloser, except the limited right to use the Confidential Information for the Purpose as set out in {{ref:confidentiality-obligations}}.\n\nAll Confidential Information is provided \"AS IS,\" and the Discloser makes no representation or warranty, express or implied, as to its accuracy or completeness.\n\nNothing in this Agreement obligates either Party to enter into any further agreement, transaction, or business relationship.",
+          "when": "disclosure_direction == \"one-way\"",
+          "provenance": [
+            "nda_02.txt",
+            "nda_05.txt"
+          ]
+        },
+        {
+          "id": "mutual",
+          "text": "All Confidential Information remains the sole property of the Disclosing Party. Nothing in this Agreement grants or shall be construed as granting either Party any license or other right, express or implied, in or to any Confidential Information or any intellectual property of the other Party, except the limited right to use the Confidential Information for the Purpose as set forth in {{ref:confidentiality-obligations}}. Neither Party is obligated by this Agreement to disclose any information or to enter into any further agreement.",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_10.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": []
+    },
+    {
+      "id": "term-survival",
+      "heading": "Term and Survival",
+      "variants": [
+        {
+          "id": "one-way",
+          "text": "This Agreement shall commence on the Effective Date and continue for a period of {{term_years}} years, unless earlier terminated by either Party upon thirty (30) days' prior written notice. The obligations of {{party_b_short_name}} under {{ref:confidentiality-obligations}} and {{ref:compelled-disclosure}}, with respect to Confidential Information disclosed during the term, shall survive the expiration or termination of this Agreement for a period of {{confidentiality_survival_years}} years from the date of disclosure; provided that, with respect to trade secrets, such obligations shall survive for so long as such information remains a trade secret under applicable law.",
+          "when": "disclosure_direction == \"one-way\"",
+          "provenance": [
+            "nda_02.txt",
+            "nda_05.txt"
+          ]
+        },
+        {
+          "id": "mutual",
+          "text": "This Agreement shall commence on the Effective Date and continue for a period of {{term_years}} years, unless earlier terminated by either Party upon thirty (30) days' prior written notice. The obligations of each Party under {{ref:confidentiality-obligations}} and {{ref:compelled-disclosure}}, with respect to Confidential Information disclosed during the term, shall survive the expiration or termination of this Agreement for a period of {{confidentiality_survival_years}} years; provided that, with respect to trade secrets, such obligations shall survive for so long as such information remains a trade secret under applicable law.",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_10.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": []
+    },
+    {
+      "id": "remedies-injunctive-relief",
+      "heading": "Remedies; Injunctive Relief",
+      "variants": [
+        {
+          "id": "one-way",
+          "text": "The {{party_b_short_name}} acknowledges that any breach or threatened breach of this Agreement may cause the {{party_a_short_name}} irreparable harm for which monetary damages would be an inadequate remedy. Accordingly, in addition to any other remedies available at law or in equity, the {{party_a_short_name}} shall be entitled to seek injunctive relief or specific performance, without the requirement of posting a bond or proving actual damages.",
+          "when": "disclosure_direction == \"one-way\"",
+          "provenance": [
+            "nda_02.txt",
+            "nda_05.txt"
+          ]
+        },
+        {
+          "id": "mutual",
+          "text": "Each Party acknowledges that any breach or threatened breach of this Agreement may cause the other Party irreparable harm for which monetary damages would be inadequate. Accordingly, in addition to any other remedies available at law or in equity, the non-breaching Party shall be entitled to seek injunctive relief or specific performance, without the requirement of posting a bond or proving actual damages.",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_10.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": []
+    },
+    {
+      "id": "governing-law",
+      "heading": "Governing Law; Jurisdiction",
+      "variants": [
+        {
+          "id": "default",
+          "text": "This Agreement shall be governed by and construed in accordance with the laws of the State of {{governing_law_state}}, without regard to its conflict of laws principles. The Parties consent to the exclusive jurisdiction of the state and federal courts located in {{governing_law_state}}.",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_02.txt",
+            "nda_05.txt",
+            "nda_10.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": []
+    },
+    {
+      "id": "entire-agreement-miscellaneous",
+      "heading": "Entire Agreement; Miscellaneous",
+      "variants": [
+        {
+          "id": "entire-agreement-with-successor-assignment",
+          "text": "This Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior or contemporaneous agreements and understandings, whether written or oral, relating thereto.\n\nThis Agreement may be amended, and any provision may be waived, only by a written instrument signed by both Parties. No failure or delay in exercising any right shall operate as a waiver thereof.\n\nNeither Party may assign this Agreement without the prior written consent of the other Party, except that either Party may assign this Agreement to a successor in connection with a merger, acquisition, or sale of all or substantially all of its assets.\n\nIf any provision of this Agreement is held to be invalid or unenforceable, the remaining provisions shall continue in full force and effect. This Agreement may be executed in counterparts, each of which shall be deemed an original and all of which together shall constitute one and the same instrument.",
+          "when": "allow_assignment_to_successor",
+          "provenance": [
+            "nda_10.txt"
+          ]
+        },
+        {
+          "id": "entire-agreement-default",
+          "text": "This Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior or contemporaneous agreements and understandings, whether written or oral, relating thereto.\n\nThis Agreement may be amended, and any provision may be waived, only by a written instrument signed by both Parties. No failure or delay in exercising any right shall operate as a waiver thereof.\n\nNeither Party may assign this Agreement without the prior written consent of the other Party.\n\nIf any provision of this Agreement is held to be invalid or unenforceable, the remaining provisions shall continue in full force and effect. This Agreement may be executed in counterparts, each of which shall be deemed an original and all of which together shall constitute one and the same instrument.",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_02.txt",
+            "nda_05.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": []
+    },
+    {
+      "id": "signature-block",
+      "heading": "Signature Block",
+      "variants": [
+        {
+          "id": "signature-block-default",
+          "text": "IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.\n\n{{party_a_name}}\n\nBy: _________________________\nName: {{party_a_signatory_name}}\nTitle: {{party_a_signatory_title}}\nDate: _______________________\n\n{{party_b_name}}\n\nBy: _________________________\nName: {{party_b_signatory_name}}\nTitle: {{party_b_signatory_title}}\nDate: _______________________",
+          "when": null,
+          "provenance": [
+            "nda_01.txt",
+            "nda_02.txt",
+            "nda_05.txt",
+            "nda_10.txt"
+          ]
+        }
+      ],
+      "include_when": null,
+      "defines": [
+        "signature-block"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "from_clause": "definitions",
+      "to_clause": "exclusions",
+      "kind": "trade-off",
+      "note": "The definition of 'Confidential Information' is deliberately broad and is acceptable only because the exclusions carve out public, pre-possessed, third-party, and independently-developed information. Narrowing the exclusions would make the broad definition oppressive; broadening them would gut the protection."
+    },
+    {
+      "from_clause": "residuals",
+      "to_clause": "no-license-no-warranty",
+      "kind": "subject-to",
+      "note": "The Recipient's right to use Residuals was conceded only because no license under the Disclosing Party's IP is granted and all Confidential Information remains the Disclosing Party's property. Weakening the no-license/ownership language would convert the residuals allowance into a de facto IP license."
+    },
+    {
+      "from_clause": "remedies-injunctive-relief",
+      "to_clause": "confidentiality-obligations",
+      "kind": "relies-on",
+      "note": "The stipulation of irreparable harm and entitlement to injunctive relief without bond presupposes the substantive confidentiality duties. Diluting those duties undermines the acknowledgment supporting equitable relief."
+    },
+    {
+      "from_clause": "return-destruction",
+      "to_clause": "term-survival",
+      "kind": "relies-on",
+      "note": "Retained archival/backup copies remain protected only while the confidentiality obligations survive; shortening the survival period would leave retained copies unprotected."
+    }
+  ],
+  "approvals": [],
+  "certificate": null,
+  "sources": [
+    "nda_01.txt",
+    "nda_02.txt",
+    "nda_05.txt",
+    "nda_10.txt"
+  ],
+  "source_contexts": {
+    "nda_01.txt": "mutual deal; long-term commercial partners",
+    "nda_02.txt": "one-way disclosure to an investor doing diligence; key-personnel sensitivity, so a non-solicit was insisted on",
+    "nda_05.txt": "one-way disclosure to a print vendor; strict destruction certification required by our records policy",
+    "nda_10.txt": "mutual deal in hospitality tech; counterparty insisted on a residuals carve-out"
+  },
+  "schema_version": 1
+}

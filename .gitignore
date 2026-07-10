@@ -1,0 +1,12 @@
+.venv/
+# .claude/ holds local tooling config INCLUDING API keys (launch.json) — never commit any of it
+.claude/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+dist/
+build/
+# advisory lock files created beside any mutated workspace state
+*.lock
+.DS_Store

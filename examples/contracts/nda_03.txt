@@ -1,0 +1,41 @@
+MUTUAL NON-DISCLOSURE AGREEMENT
+
+This Mutual Non-Disclosure Agreement (this "Agreement") is entered into and effective as of June 1, 2024 (the "Effective Date"), by and between Ferrous Gate Robotics, Inc., a Delaware corporation with its principal place of business at 2140 Harbor Bay Parkway, Alameda, California 94502 ("Ferrous Gate"), and Bluestem Capital Partners LLC, a Delaware limited liability company with its principal place of business at 555 Mission Street, Suite 2800, San Francisco, California 94105 ("Bluestem"). Ferrous Gate and Bluestem are each referred to herein as a "Party" and collectively as the "Parties." The Parties wish to explore a potential investment and commercial relationship (the "Purpose") and, in connection with the Purpose, each Party may disclose to the other certain confidential and proprietary information.
+
+1. Definitions. "Confidential Information" means any information, in any form or medium, disclosed by a Party (the "Disclosing Party") to the other Party (the "Receiving Party") in connection with the Purpose that is designated as confidential or that reasonably should be understood to be confidential given its nature or the circumstances of disclosure, including, without limitation, business plans, financial statements and projections, product designs, robotics hardware specifications, software source code, algorithms, trade secrets, customer and supplier lists, pricing, and the existence and terms of the Parties' discussions regarding the Purpose.
+
+2. Exclusions. Confidential Information does not include information that the Receiving Party can demonstrate by competent evidence: (a) is or becomes generally known to the public through no breach of this Agreement by the Receiving Party; (b) was rightfully known to the Receiving Party, without restriction, prior to receipt from the Disclosing Party; (c) is rightfully received from a third party without breach of any obligation of confidentiality; or (d) is independently developed by the Receiving Party without use of or reference to the Disclosing Party's Confidential Information.
+
+3. Confidentiality Obligations. The Receiving Party shall: (a) hold the Disclosing Party's Confidential Information in strict confidence, using no less than reasonable care; (b) use the Confidential Information solely for the Purpose; (c) not disclose it to any third party except to its directors, officers, employees, attorneys, accountants, and financial advisors (collectively, "Representatives") who need to know it for the Purpose and are bound by confidentiality obligations at least as protective as those herein; and (d) be responsible for any breach of this Agreement by its Representatives.
+
+4. Compelled Disclosure. If the Receiving Party is required by law, regulation, or valid court or governmental order to disclose Confidential Information, it may do so without breaching Section 3, provided that it (a) gives the Disclosing Party prompt written notice, to the extent legally permitted, so the Disclosing Party may seek a protective order or other remedy, and (b) discloses only the portion legally required to be disclosed.
+
+5. No License. All Confidential Information remains the sole property of the Disclosing Party. Nothing in this Agreement grants the Receiving Party any license or other right, express or implied, in the Confidential Information or any patents, copyrights, trademarks, trade secrets, or other intellectual property of the Disclosing Party, except the limited right to use the Confidential Information for the Purpose under Section 3.
+
+6. Return or Destruction. Upon the Disclosing Party's written request or upon termination or expiration of this Agreement, the Receiving Party shall promptly return or destroy all Confidential Information of the Disclosing Party in its possession, except for copies retained pursuant to automatic backup procedures or as required by law, which remain subject to the continuing obligations of Section 3.
+
+7. Term and Survival. This Agreement commences on the Effective Date and continues for one (1) year, unless earlier terminated by either Party upon thirty (30) days' prior written notice. Notwithstanding termination or expiration, the obligations in Sections 3 through 6 survive for five (5) years from the date of each disclosure; obligations with respect to trade secrets survive for so long as the information remains a trade secret under applicable law.
+
+8. No Obligation; No Warranty. Nothing herein obligates either Party to disclose any information or enter into any further agreement or transaction. All Confidential Information is provided "AS IS," without warranty of accuracy or completeness.
+
+9. Remedies. Unauthorized use or disclosure of Confidential Information may cause irreparable harm for which monetary damages would be inadequate, and the Disclosing Party shall be entitled to seek injunctive relief in addition to all other remedies available at law or in equity.
+
+10. Governing Law. This Agreement shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflicts of law principles. The Parties consent to the exclusive jurisdiction of the state and federal courts located in San Francisco County, California.
+
+11. Miscellaneous. This Agreement constitutes the entire agreement between the Parties concerning its subject matter and supersedes all prior or contemporaneous agreements and understandings, whether written or oral. It may be amended only in a writing signed by both Parties, and neither Party may assign it without the other Party's prior written consent. If any provision is held unenforceable, the remaining provisions remain in full force and effect. This Agreement may be executed in counterparts.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.
+
+FERROUS GATE ROBOTICS, INC.
+
+By: _______________________________
+Name: Elena Marsh
+Title: Chief Executive Officer
+Date: _____________________________
+
+BLUESTEM CAPITAL PARTNERS LLC
+
+By: _______________________________
+Name: Daniel Okafor
+Title: Managing Partner
+Date: _____________________________

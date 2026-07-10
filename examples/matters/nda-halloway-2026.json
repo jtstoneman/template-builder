@@ -1,0 +1,126 @@
+{
+  "id": "nda-halloway-2026",
+  "template": "nda_template",
+  "template_hash": "sha256:c1c3e7fecb0e444e3b604bb784df560b1fe2f4e2b99b7d8059b3978367378690",
+  "doc_type": "Non-Disclosure Agreement",
+  "counterparty": "Halloway Marine Systems",
+  "answers": {
+    "is_mutual": true,
+    "effective_date": "1 September 2026",
+    "party_a_name": "Meridian Analytics, Inc.",
+    "party_a_description": "a Delaware corporation",
+    "party_a_short_name": "Meridian",
+    "party_b_name": "Halloway Marine Systems, Inc.",
+    "party_b_description": "a Washington corporation",
+    "party_b_short_name": "Halloway",
+    "purpose_description": "technical due-diligence discussions between the parties",
+    "confidential_information_categories": "sonar firmware roadmaps and integration test data",
+    "include_non_solicitation": false,
+    "non_solicitation_months": 12,
+    "include_residuals": false,
+    "term_years": 3.0,
+    "termination_notice_days": 30,
+    "survival_years": 5,
+    "governing_law_state": "New York",
+    "courts_venue": "the state and federal courts located in New York County, New York",
+    "include_assignment_successor_exception": true,
+    "party_a_signatory_name": "Dana Whitfield",
+    "party_a_signatory_title": "Chief Executive Officer",
+    "party_b_signatory_name": "Rex Halloway",
+    "party_b_signatory_title": "President"
+  },
+  "status": "open",
+  "opened": "2026-07-10T16:25:57",
+  "updated": "2026-07-10T19:27:20",
+  "rounds": [
+    {
+      "number": 1,
+      "received": "2026-07-10T16:26:12",
+      "source": "halloway_round1_returned.txt",
+      "asks": [
+        {
+          "clause_id": "term-survival",
+          "kind": "modify",
+          "our_text": "This Agreement shall commence on the Effective Date and continue for a period of 3 years, unless earlier terminated by either Party upon 30 days' prior written notice.\n\nThe obligations set forth in clause 3 with respect to Confidential Information disclosed during the term shall survive any expiration or termination of this Agreement for a period of 5 years thereafter; provided that obligations with respect to trade secrets shall survive for so long as such information remains a trade secret under applicable law.",
+          "their_text": "This Agreement shall commence on the Effective Date and continue for a period of 7 years, unless earlier terminated by either Party upon 30 days' prior written notice.\n\nThe obligations set forth in clause 3 with respect to Confidential Information disclosed during the term shall survive any expiration or termination of this Agreement for a period of 5 years thereafter; provided that obligations with respect to trade secrets shall survive for so long as such information remains a trade secret under applicable law."
+        },
+        {
+          "clause_id": "remedies-injunctive-relief",
+          "kind": "delete",
+          "our_text": "Each Party acknowledges that any breach or threatened breach of this Agreement may cause the other Party irreparable harm for which monetary damages would be an inadequate remedy. Accordingly, in addition to any other remedies available at law or in equity, the non-breaching Party shall be entitled to seek injunctive relief and specific performance, without the necessity of posting a bond or proving actual damages.",
+          "their_text": ""
+        }
+      ],
+      "unanchored": [],
+      "template_hash": "",
+      "responses": [],
+      "plan_summary": "no playbook — all 2 asks escalated"
+    },
+    {
+      "number": 2,
+      "received": "2026-07-10T19:26:33",
+      "source": "halloway_round2_returned.txt",
+      "asks": [
+        {
+          "clause_id": "compelled-disclosure",
+          "kind": "modify",
+          "our_text": "If the Receiving Party is required by law, regulation, or valid order of a court or governmental authority to disclose Confidential Information, it may do so without breaching clause 3, provided that, to the extent legally permitted, the Receiving Party (a) gives the Disclosing Party prompt written notice of the requirement so that the Disclosing Party may seek a protective order or other appropriate remedy, and reasonably cooperates, at the Disclosing Party's expense, in any such effort, and (b) discloses only that portion of the Confidential Information that is legally required to be disclosed. Any disclosure made pursuant to this clause shall not otherwise relieve the Receiving Party of its obligations under clause 3.",
+          "their_text": "If the Receiving Party is required by law, regulation, or valid order of a court or governmental authority to disclose Confidential Information, it may do so without breaching clause 3, provided that, to the extent legally permitted, the Receiving Party (a) gives the Disclosing Party notice within thirty (30) days of the requirement so that the Disclosing Party may seek a protective order or other appropriate remedy, and reasonably cooperates, at the Disclosing Party's expense, in any such effort, and (b) discloses only that portion of the Confidential Information that is legally required to be disclosed. Any disclosure made pursuant to this clause shall not otherwise relieve the Receiving Party of its obligations under clause 3."
+        }
+      ],
+      "unanchored": [],
+      "template_hash": "sha256:c1c3e7fecb0e444e3b604bb784df560b1fe2f4e2b99b7d8059b3978367378690",
+      "responses": [],
+      "plan_summary": "no playbook — all 1 asks escalated"
+    }
+  ],
+  "escalations": [
+    {
+      "clause_id": "term-survival",
+      "round": 1,
+      "stance": "escalate",
+      "analysis": "no playbook for this document type yet — the lawyer decides; the decision will be journaled and feed `tb skill update`",
+      "proposed_text": null,
+      "requires": "lawyer",
+      "resolved": true
+    },
+    {
+      "clause_id": "remedies-injunctive-relief",
+      "round": 1,
+      "stance": "escalate",
+      "analysis": "no playbook for this document type yet — the lawyer decides; the decision will be journaled and feed `tb skill update`",
+      "proposed_text": null,
+      "requires": "lawyer",
+      "resolved": true
+    },
+    {
+      "clause_id": "compelled-disclosure",
+      "round": 2,
+      "stance": "escalate",
+      "analysis": "no playbook for this document type yet — the lawyer decides; the decision will be journaled and feed `tb skill update`",
+      "proposed_text": null,
+      "requires": "lawyer",
+      "resolved": true
+    }
+  ],
+  "deviations": [
+    {
+      "clause_id": "term-survival",
+      "round": 1,
+      "standard_text": "This Agreement shall commence on the Effective Date and continue for a period of 3 years, unless earlier terminated by either Party upon 30 days' prior written notice.\n\nThe obligations set forth in clause 3 with respect to Confidential Information disclosed during the term shall survive any expiration or termination of this Agreement for a period of 5 years thereafter; provided that obligations with respect to trade secrets shall survive for so long as such information remains a trade secret under applicable law.",
+      "agreed_text": "This Agreement shall commence on the Effective Date and continue for a period of 7 years, unless earlier terminated by either Party upon 30 days' prior written notice.\n\nThe obligations set forth in clause 3 with respect to Confidential Information disclosed during the term shall survive any expiration or termination of this Agreement for a period of 5 years thereafter; provided that obligations with respect to trade secrets shall survive for so long as such information remains a trade secret under applicable law.",
+      "approved_by": "jane@firm.com",
+      "rationale": "seven-year tail acceptable for a marine-systems supplier; traded against holding injunctive relief",
+      "date": "2026-07-10"
+    },
+    {
+      "clause_id": "compelled-disclosure",
+      "round": 2,
+      "standard_text": "If the Receiving Party is required by law, regulation, or valid order of a court or governmental authority to disclose Confidential Information, it may do so without breaching clause 3, provided that, to the extent legally permitted, the Receiving Party (a) gives the Disclosing Party prompt written notice of the requirement so that the Disclosing Party may seek a protective order or other appropriate remedy, and reasonably cooperates, at the Disclosing Party's expense, in any such effort, and (b) discloses only that portion of the Confidential Information that is legally required to be disclosed. Any disclosure made pursuant to this clause shall not otherwise relieve the Receiving Party of its obligations under clause 3.",
+      "agreed_text": "If the Receiving Party is required by law, regulation, or valid order of a court or governmental authority to disclose Confidential Information, it may do so without breaching clause 3, provided that, to the extent legally permitted, the Receiving Party (a) gives the Disclosing Party notice within thirty (30) days of the requirement so that the Disclosing Party may seek a protective order or other appropriate remedy, and reasonably cooperates, at the Disclosing Party's expense, in any such effort, and (b) discloses only that portion of the Confidential Information that is legally required to be disclosed. Any disclosure made pursuant to this clause shall not otherwise relieve the Receiving Party of its obligations under clause 3.",
+      "approved_by": "jane@firm.com",
+      "rationale": "thirty-day notice window acceptable; compelled disclosure carve-out intact",
+      "date": "2026-07-10"
+    }
+  ]
+}

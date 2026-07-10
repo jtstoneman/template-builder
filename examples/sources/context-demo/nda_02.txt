@@ -1,0 +1,41 @@
+NON-DISCLOSURE AGREEMENT
+
+This Non-Disclosure Agreement (this "Agreement") is entered into and made effective as of January 15, 2022 (the "Effective Date"), by and between Harborlight Therapeutics, Inc., a Delaware corporation with its principal place of business at 400 Beacon Wharf Drive, Wilmington, Delaware 19801 (the "Discloser"), and Quayside Ventures LP, a Delaware limited partnership with its principal place of business at 88 Pier Lane, Suite 300, Boston, Massachusetts 02110 (the "Recipient"). The Discloser and the Recipient are each a "Party" and together the "Parties." The Parties are entering into this Agreement in connection with the Recipient's evaluation of a potential investment in the Discloser (the "Purpose").
+
+1. Definitions. "Confidential Information" means all non-public information, in any form or medium, disclosed by or on behalf of the Discloser to the Recipient, whether before or after the Effective Date, that is designated as confidential or that a reasonable person would understand to be confidential given the nature of the information and the circumstances of disclosure, including, without limitation, scientific and clinical data, drug candidates and pipeline information, research protocols, regulatory strategies and correspondence, manufacturing processes, financial statements and projections, business plans, investor materials, and the terms and existence of discussions between the Parties regarding the Purpose. "Representatives" means a Party's directors, officers, partners, employees, attorneys, accountants, and financial advisors who have a need to know Confidential Information in connection with the Purpose.
+
+2. Confidentiality Obligations. The Recipient shall: (a) hold all Confidential Information in strict confidence and protect it with at least the same degree of care it uses to protect its own confidential information, and in no event less than reasonable care; (b) use Confidential Information solely for the Purpose and for no other purpose; (c) not disclose Confidential Information to any third party other than its Representatives who are bound by confidentiality obligations at least as protective as those in this Agreement; and (d) be responsible for any breach of this Agreement by its Representatives.
+
+3. Exclusions. The obligations in Section 2 do not apply to information that the Recipient can demonstrate by written records: (a) is or becomes generally known to the public through no act or omission of the Recipient or its Representatives; (b) was rightfully in the Recipient's possession without restriction prior to disclosure by the Discloser; (c) is rightfully received by the Recipient from a third party without breach of any obligation of confidentiality; or (d) is independently developed by the Recipient without use of or reference to the Confidential Information.
+
+4. Compelled Disclosure. If the Recipient is required by law, regulation, or valid legal process to disclose Confidential Information, the Recipient shall, to the extent legally permitted, provide the Discloser with prompt written notice and reasonable cooperation so that the Discloser may seek a protective order or other appropriate remedy. The Recipient may then disclose only that portion of the Confidential Information that it is legally required to disclose, and any such disclosure shall not otherwise relieve the Recipient of its obligations under Section 2.
+
+5. Non-Solicitation. During the term of this Agreement and for twelve (12) months following disclosure of Confidential Information identifying the Discloser's personnel, but in no event longer than twelve (12) months after the Effective Date of the Recipient's last receipt of Confidential Information, the Recipient shall not directly or indirectly solicit for employment or engagement any employee of the Discloser with whom the Recipient came into contact, or of whom the Recipient became aware, in connection with the Purpose. The foregoing does not prohibit general solicitations not targeted at the Discloser's employees, or the hiring of any person who responds to such general solicitations.
+
+6. Return or Destruction. Upon the Discloser's written request, or upon termination or expiration of this Agreement, the Recipient shall promptly return or destroy all Confidential Information, including all copies, notes, and derivative materials, and shall certify such return or destruction in writing upon request. Notwithstanding the foregoing, the Recipient may retain one archival copy solely for legal compliance purposes and copies stored in automatic backup systems, provided that all retained materials remain subject to Section 2 for so long as they are retained.
+
+7. No License; No Warranty. Nothing in this Agreement grants the Recipient any license or other rights in or to the Confidential Information. All Confidential Information is provided "AS IS," and the Discloser makes no representation or warranty as to its accuracy or completeness.
+
+8. Term and Survival. This Agreement shall commence on the Effective Date and continue for three (3) years thereafter, unless earlier terminated by either Party upon thirty (30) days' written notice. The Recipient's obligations under Sections 2 through 6 shall survive any termination or expiration of this Agreement with respect to Confidential Information received during the term, for a period of three (3) years from the date of disclosure; provided that obligations with respect to trade secrets shall survive for so long as such information remains a trade secret under applicable law.
+
+9. Injunctive Relief. The Recipient acknowledges that any breach or threatened breach of this Agreement may cause the Discloser irreparable harm for which monetary damages would be an inadequate remedy. Accordingly, the Discloser shall be entitled to seek injunctive or other equitable relief, without the requirement of posting a bond, in addition to any other remedies available at law or in equity.
+
+10. Governing Law. This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without regard to its conflict of laws principles. The Parties consent to the exclusive jurisdiction of the state and federal courts located in the State of Delaware.
+
+11. Entire Agreement; Miscellaneous. This Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior agreements and understandings, whether written or oral, relating thereto. This Agreement may be amended only by a written instrument signed by both Parties. If any provision is held unenforceable, the remainder shall continue in full force and effect. Neither Party may assign this Agreement without the prior written consent of the other Party. This Agreement may be executed in counterparts, each of which shall be deemed an original.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.
+
+HARBORLIGHT THERAPEUTICS, INC.
+
+By: _______________________________
+Name: Elena M. Vasquez
+Title: Chief Executive Officer
+Date: _____________________________
+
+QUAYSIDE VENTURES LP
+
+By: _______________________________
+Name: Robert T. Callahan
+Title: Managing Partner
+Date: _____________________________

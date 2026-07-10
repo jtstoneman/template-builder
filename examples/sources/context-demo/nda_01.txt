@@ -1,0 +1,39 @@
+MUTUAL NON-DISCLOSURE AGREEMENT
+
+This Mutual Non-Disclosure Agreement (this "Agreement") is made effective as of March 3, 2023 (the "Effective Date"), by and between Meridian Analytics, Inc., a Delaware corporation ("Meridian"), and Callowhill Systems LLC ("Callowhill"), each a "Party" and collectively the "Parties." The Parties wish to explore a potential business relationship relating to data analytics services (the "Purpose"), in connection with which each Party may disclose to the other certain confidential and proprietary information.
+
+1. DEFINITIONS. "Confidential Information" means any non-public information, in any form or medium, disclosed by or on behalf of a Party (the "Disclosing Party") to the other Party (the "Receiving Party") in connection with the Purpose, including without limitation business plans, financial information, customer lists, pricing, product roadmaps, technical data, software, source code, algorithms, trade secrets, and the existence and terms of the Parties' discussions, whether or not marked as confidential, provided that information disclosed orally shall constitute Confidential Information if it would reasonably be understood to be confidential given its nature and the circumstances of disclosure.
+
+2. CONFIDENTIALITY OBLIGATIONS. The Receiving Party shall: (a) hold the Disclosing Party's Confidential Information in strict confidence and protect it with at least the same degree of care it uses for its own confidential information, and in no event less than reasonable care; (b) use the Confidential Information solely for the Purpose; and (c) not disclose the Confidential Information to any third party except to its directors, officers, employees, and professional advisors who have a need to know such information for the Purpose and who are bound by confidentiality obligations no less protective than those set forth herein. The Receiving Party shall be responsible for any breach of this Agreement by any such representative.
+
+3. EXCLUSIONS. The obligations set forth in Section 2 shall not apply to information that the Receiving Party can demonstrate: (a) is or becomes generally known to the public through no fault of the Receiving Party; (b) was rightfully in the Receiving Party's possession without restriction prior to disclosure; (c) is rightfully received from a third party without breach of any obligation of confidentiality; or (d) is independently developed by the Receiving Party without use of or reference to the Disclosing Party's Confidential Information.
+
+4. COMPELLED DISCLOSURE. Notwithstanding Section 2, the Receiving Party may disclose Confidential Information to the extent required by law, regulation, or valid order of a court or governmental authority, provided that the Receiving Party, to the extent legally permitted, gives the Disclosing Party prompt written notice and reasonably cooperates, at the Disclosing Party's expense, in any effort to seek a protective order or other appropriate remedy.
+
+5. RETURN OR DESTRUCTION OF MATERIALS. Upon termination or expiration of this Agreement or the written request of the Disclosing Party, the Receiving Party shall promptly return or, at the Disclosing Party's election, destroy all Confidential Information of the Disclosing Party, including all copies and notes, and shall certify such return or destruction in writing upon request. The Receiving Party may retain one archival copy solely for legal compliance purposes, which shall remain subject to Section 2 for so long as it is retained.
+
+6. NO LICENSE; NO OBLIGATION. All Confidential Information remains the sole property of the Disclosing Party. Nothing in this Agreement grants either Party any license or other right to the intellectual property of the other Party, nor obligates either Party to enter into any further agreement or transaction.
+
+7. TERM AND SURVIVAL. This Agreement shall commence on the Effective Date and continue for a period of two (2) years, unless earlier terminated by either Party upon thirty (30) days' prior written notice. The obligations set forth in Sections 2, 4, and 5 shall survive for three (3) years following the termination or expiration of this Agreement; provided that, with respect to trade secrets, such obligations shall survive for so long as such information remains a trade secret under applicable law.
+
+8. INJUNCTIVE RELIEF. Each Party acknowledges that any breach or threatened breach of this Agreement may cause the Disclosing Party irreparable harm for which monetary damages would be inadequate. Accordingly, in addition to any other remedies available at law or in equity, the Disclosing Party shall be entitled to seek injunctive relief or specific performance without posting a bond or proving actual damages.
+
+9. GOVERNING LAW; JURISDICTION. This Agreement shall be governed by and construed in accordance with the laws of the State of New York, without regard to its conflict of laws principles. The Parties consent to the exclusive jurisdiction of the state and federal courts located in New York County, New York.
+
+10. GENERAL. This Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior agreements and understandings, written or oral, relating thereto. No amendment or waiver shall be effective unless in writing and signed by both Parties. Neither Party may assign this Agreement without the prior written consent of the other Party. If any provision is held unenforceable, the remaining provisions shall remain in full force and effect. This Agreement may be executed in counterparts, each of which shall be deemed an original.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.
+
+MERIDIAN ANALYTICS, INC.
+
+By: _________________________
+Name: Diane R. Whitfield
+Title: Chief Operating Officer
+Date: _______________________
+
+CALLOWHILL SYSTEMS LLC
+
+By: _________________________
+Name: Marcus T. Ellison
+Title: Managing Member
+Date: _______________________

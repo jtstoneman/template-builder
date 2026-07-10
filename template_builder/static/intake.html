@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New matter</title>
+<style>
+  :root { --bg:#faf9f7; --panel:#fff; --ink:#1c1b18; --muted:#71706a;
+          --line:#e7e5e0; --accent:#1f5f4e; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:640px; margin:0 auto; padding:40px 22px 80px; }
+  h1 { font-size:21px; letter-spacing:-0.01em; }
+  p.lead { color:var(--muted); font-size:14px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px;
+          padding:22px 24px; margin-top:18px; }
+  label { display:block; font-size:13px; margin:14px 0 4px; }
+  label .name { font-family:ui-monospace, Menlo, monospace; font-size:11px; color:var(--muted); }
+  input[type=text], input[type=number], select {
+    width:100%; font:inherit; font-size:13.5px; padding:7px 10px;
+    border:1px solid var(--line); border-radius:7px; background:var(--bg); }
+  input:focus, select:focus { outline:2px solid #b9d6cc; border-color:var(--accent); }
+  .bool { display:flex; gap:9px; align-items:flex-start; margin:14px 0 4px; }
+  .bool input { margin-top:3px; accent-color:var(--accent); }
+  .bool label { margin:0; }
+  button { font:inherit; font-size:14px; width:100%; margin-top:22px; padding:10px;
+           border-radius:8px; border:none; background:var(--accent); color:#fff; cursor:pointer; }
+  button:disabled { opacity:0.5; }
+  .notice { border-radius:9px; padding:10px 14px; font-size:13.5px; margin-top:16px; display:none; }
+  .notice.err { background:#fbeceb; color:#a13c32; display:block; }
+  .notice.ok { background:#e8f3ec; color:#1a6b3c; display:block; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">New matter</h1>
+  <p class="lead">Answer the questionnaire below. A draft goes to the legal team;
+     anything unusual is routed to a lawyer automatically.</p>
+  <div class="card">
+    <label>Your organisation / matter reference</label>
+    <input type="text" id="counterparty" placeholder="e.g. Halloway Marine Systems">
+    <form id="q"></form>
+    <button id="submit" disabled>Submit</button>
+    <div class="notice" id="notice"></div>
+  </div>
+</main>
+<script>
+"use strict";
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
+  ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const templateName = decodeURIComponent(location.pathname.split("/").pop());
+let variables = [];
+
+async function init() {
+  // the questionnaire-only endpoint: this page faces the counterparty and
+  // must never receive the firm's variants/conditions/provenance
+  const res = await fetch(`/api/intake/${encodeURIComponent(templateName)}`);
+  if (!res.ok) { notice("err", "This intake link is not valid."); return; }
+  const t = await res.json();
+  document.getElementById("title").textContent = t.doc_type + " — new matter";
+  document.title = t.doc_type + " intake";
+  variables = t.variables;
+  const form = document.getElementById("q");
+  for (const v of variables) {
+    const name = esc(v.name);  // LLM-derived: escaped like everything else
+    if (v.type === "boolean") {
+      form.insertAdjacentHTML("beforeend", `
+        <div class="bool"><input type="checkbox" id="q-${name}">
+        <label for="q-${name}">${esc(v.question)} <span class="name">${name}</span></label></div>`);
+    } else if (v.type === "choice") {
+      form.insertAdjacentHTML("beforeend", `
+        <label for="q-${name}">${esc(v.question)} <span class="name">${name}</span></label>
+        <select id="q-${name}"><option value="">—</option>
+          ${v.choices.map((c) => `<option>${esc(c)}</option>`).join("")}</select>`);
+    } else {
+      form.insertAdjacentHTML("beforeend", `
+        <label for="q-${name}">${esc(v.question)} <span class="name">${name}</span></label>
+        <input type="${v.type === "number" ? "number" : "text"}" id="q-${name}" step="any">`);
+    }
+  }
+  document.getElementById("submit").disabled = false;
+}
+
+function notice(kind, text) {
+  const el = document.getElementById("notice");
+  el.className = `notice ${kind}`;
+  el.textContent = text;
+}
+
+document.getElementById("submit").addEventListener("click", async () => {
+  const counterparty = document.getElementById("counterparty").value.trim();
+  if (!counterparty) { notice("err", "Please give your organisation / reference."); return; }
+  const answers = {}, missing = [];
+  for (const v of variables) {
+    const el = document.getElementById(`q-${v.name}`);
+    if (v.type === "boolean") answers[v.name] = el.checked;
+    else if (el.value === "") missing.push(v.question);
+    else answers[v.name] = v.type === "number" ? Number(el.value) : el.value;
+  }
+  if (missing.length) { notice("err", `Please answer: ${missing[0]}`); return; }
+  const id = `${templateName}-${counterparty.toLowerCase().replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "").slice(0, 24)}-${new Date().toISOString().slice(0, 10)}`;
+  const button = document.getElementById("submit");
+  button.disabled = true;  // a double-click must not race two submissions
+  let res;
+  try {
+    res = await fetch("/api/matters", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, template: templateName, counterparty, answers,
+                             status: "intake" }),
+    });
+  } catch {
+    button.disabled = false;
+    notice("err", "Could not reach the server — please try again.");
+    return;
+  }
+  if (!res.ok) {
+    const detail = await res.json().then((b) => b.detail).catch(() => res.statusText);
+    button.disabled = false;
+    if (res.status === 409) {
+      notice("err", "A matter with this reference already exists today — the legal "
+                    + "team already has it. Add a distinguishing reference if this "
+                    + "is a different matter.");
+    } else {
+      notice("err", String(detail));
+    }
+    return;
+  }
+  document.getElementById("q").style.display = "none";
+  button.style.display = "none";
+  notice("ok", `Thank you — your matter reference is ${id}. The legal team has your draft.`);
+});
+
+init();
+</script>
+</body>
+</html>

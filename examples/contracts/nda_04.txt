@@ -1,0 +1,39 @@
+MUTUAL NON-DISCLOSURE AGREEMENT
+
+This Mutual Non-Disclosure Agreement (this "Agreement") is made effective as of September 30, 2021 (the "Effective Date"), by and between Tessellate Software Corp., a Delaware corporation ("Tessellate"), and Norwich Manufacturing Company, a New York corporation ("Norwich"), each a "Party" and together the "Parties." The Parties wish to explore a potential business relationship concerning industrial process software (the "Purpose"), in connection with which each Party may disclose confidential and proprietary information to the other.
+
+1. Definitions. "Confidential Information" means all non-public information, in any form or medium, disclosed by or on behalf of either Party (the "Disclosing Party") to the other Party (the "Receiving Party") in connection with the Purpose, including without limitation software code, algorithms, product roadmaps, manufacturing processes, engineering specifications, financial data, pricing, customer and supplier lists, and business plans, whether or not marked as confidential, provided that information disclosed orally shall be Confidential Information if it would reasonably be understood to be confidential given its nature and the circumstances of disclosure.
+
+2. Confidentiality Obligations. The Receiving Party shall: (a) hold the Disclosing Party's Confidential Information in strict confidence, protecting it with no less than reasonable care; (b) use such Confidential Information solely for the Purpose; (c) not disclose such Confidential Information to any third party without the prior written consent of the Disclosing Party, except to its employees, officers, and professional advisors who have a need to know for the Purpose and who are bound by confidentiality obligations no less protective than those herein; and (d) promptly notify the Disclosing Party of any unauthorized use or disclosure. The Receiving Party is responsible for any breach of this Agreement by its representatives.
+
+3. Exclusions. The obligations of Section 2 shall not apply to information that the Receiving Party can demonstrate by competent written evidence: (a) is or becomes generally known to the public through no act or omission of the Receiving Party in breach of this Agreement; (b) was rightfully in the Receiving Party's possession, without restriction on use or disclosure, prior to its receipt from the Disclosing Party; (c) is rightfully received by the Receiving Party from a third party without breach of any obligation of confidentiality owed to the Disclosing Party; or (d) is independently developed by the Receiving Party without use of or reference to the Disclosing Party's Confidential Information. In addition, the Receiving Party may disclose Confidential Information to the extent required by law, regulation, or valid order of a court or governmental authority, provided that it gives the Disclosing Party, to the extent legally permitted, prompt written notice and reasonable cooperation in any effort to obtain a protective order or other confidential treatment.
+
+4. Non-Solicitation. During the term of this Agreement and for twenty-four (24) months following its expiration or termination, neither Party shall, directly or indirectly, solicit for employment or engagement any employee of the other Party with whom it had contact in connection with the Purpose, provided that nothing in this Section 4 prohibits general solicitations of employment not directed at such employees, or hiring any person who responds to such a general solicitation.
+
+5. No License; No Obligation. All Confidential Information remains the sole property of the Disclosing Party. This Agreement grants the Receiving Party no license or other right in the Confidential Information except the limited right of use set forth in Section 2, and obligates neither Party to proceed with any transaction.
+
+6. Return or Destruction. Upon the Disclosing Party's written request, the Receiving Party shall promptly return or destroy all Confidential Information of the Disclosing Party in its possession, except copies retained as required by law or bona fide document retention policies, which remain subject to Section 2.
+
+7. Term and Survival. This Agreement commences on the Effective Date and continues for five (5) years, unless earlier terminated by either Party on thirty (30) days' written notice. The obligations of Sections 2, 3, 4, and 6 with respect to Confidential Information disclosed during the term shall survive expiration or termination of this Agreement for a period of five (5) years thereafter.
+
+8. Equitable Relief. Each Party acknowledges that unauthorized use or disclosure of Confidential Information may cause irreparable harm to the Disclosing Party for which monetary damages would be an inadequate remedy, and agrees that the Disclosing Party shall be entitled to seek equitable relief, without the necessity of posting a bond, in addition to any other remedies available at law or in equity.
+
+9. Governing Law. This Agreement is governed by the laws of the State of New York, without regard to its conflict of laws principles. The Parties consent to the exclusive jurisdiction of the state and federal courts located in New York County, New York.
+
+10. Entire Agreement; Miscellaneous. This Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior understandings, written or oral. No amendment or waiver is effective unless in writing and signed by both Parties. Neither Party may assign this Agreement without the other Party's prior written consent. If any provision is held unenforceable, the remaining provisions remain in full force and effect. This Agreement may be executed in counterparts.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.
+
+TESSELLATE SOFTWARE CORP.
+
+By: _______________________________
+Name: Priya Raghunathan
+Title: Chief Operating Officer
+Date: _____________________________
+
+NORWICH MANUFACTURING COMPANY
+
+By: _______________________________
+Name: Daniel W. Kowalczyk
+Title: President
+Date: _____________________________

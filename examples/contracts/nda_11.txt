@@ -1,0 +1,57 @@
+NON-DISCLOSURE AGREEMENT
+
+This Non-Disclosure Agreement (this "Agreement") is made and entered into as of August 23, 2021 (the "Effective Date"), by and between Fenwick Optical Corporation, a Texas corporation with its principal place of business at 4410 Merchant Row, Suite 300, Fort Worth, Texas 76102 ("Discloser"), and Gable & Sons Distribution LLC, a Texas limited liability company with its principal place of business at 812 Commerce Loop, Waco, Texas 76706 ("Recipient"). Discloser and Recipient may each be referred to herein as a "Party" and together as the "Parties."
+
+WHEREAS, Discloser intends to disclose certain confidential and proprietary information to Recipient in connection with the evaluation of a potential distribution relationship for Discloser's optical lens and coating products (the "Purpose"), and Recipient is willing to receive and protect such information on the terms set forth below.
+
+1. DEFINITIONS
+
+"Confidential Information" means all non-public information, in any form or medium, disclosed by or on behalf of Discloser to Recipient, whether orally, in writing, or electronically, that is designated as confidential or that a reasonable person would understand to be confidential given the circumstances of disclosure, including, without limitation, product designs, lens coating formulations, manufacturing processes, pricing and cost data, supplier and customer lists, sales forecasts, financial statements, and business strategies, together with any notes or analyses prepared by Recipient to the extent they reflect such information.
+
+2. EXCLUSIONS
+
+Confidential Information does not include information that Recipient can demonstrate by competent written records: (a) is or becomes generally known to the public through no act or omission of Recipient; (b) was rightfully in Recipient's possession, without restriction on use or disclosure, prior to receipt from Discloser; (c) is rightfully received by Recipient from a third party without breach of any obligation of confidentiality; or (d) is independently developed by Recipient without use of or reference to the Confidential Information.
+
+3. CONFIDENTIALITY OBLIGATIONS
+
+Recipient shall: (a) use the Confidential Information solely for the Purpose; (b) not disclose it to any third party without Discloser's prior written consent; (c) restrict access to those of its employees, officers, and professional advisors who need to know it for the Purpose and who are bound by confidentiality obligations at least as protective as those herein; and (d) protect it with the same degree of care it uses for its own confidential information, and in no event less than reasonable care. Recipient is responsible for any breach of this Agreement by persons to whom it discloses Confidential Information under this Section 3.
+
+4. COMPELLED DISCLOSURE
+
+If Recipient is required by law or valid order of a court or governmental authority to disclose any Confidential Information, Recipient may do so notwithstanding Section 3, provided that Recipient gives Discloser prompt written notice, to the extent legally permitted, so that Discloser may seek a protective order, cooperates reasonably with Discloser at Discloser's expense in any such effort, and discloses only the portion legally required to be disclosed.
+
+5. RETURN OR DESTRUCTION OF MATERIALS
+
+Upon the earlier of written request by Discloser or the expiration or termination of this Agreement, Recipient shall promptly return to Discloser or destroy all materials containing Confidential Information, including all copies, and shall certify such return or destruction in writing within ten (10) business days. Recipient may retain one archival copy solely as required by applicable law, subject to the continuing obligations of Section 3.
+
+6. NO LICENSE; NO OBLIGATION
+
+All Confidential Information remains the sole property of Discloser. Nothing in this Agreement grants Recipient any license under any patent, trademark, copyright, or trade secret of Discloser, or obligates either Party to enter into any further agreement or transaction. All Confidential Information is provided "AS IS," without warranty of accuracy or completeness.
+
+7. TERM AND SURVIVAL
+
+This Agreement shall commence on the Effective Date and continue for a period of two (2) years, unless earlier terminated by either Party upon thirty (30) days' prior written notice. Recipient's obligations under Sections 3, 4, and 5 with respect to Confidential Information disclosed during the term shall survive expiration or termination of this Agreement for a period of two (2) years thereafter; provided that obligations with respect to trade secrets shall survive for so long as such information remains a trade secret under applicable law.
+
+8. GOVERNING LAW
+
+This Agreement shall be governed by and construed in accordance with the laws of the State of Texas, without regard to its conflict of laws principles. The Parties consent to the exclusive jurisdiction of the state and federal courts located in Tarrant County, Texas for any action arising out of or relating to this Agreement.
+
+9. GENERAL PROVISIONS
+
+This Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior understandings relating thereto. No amendment or waiver shall be effective unless in writing and signed by both Parties. Neither Party may assign this Agreement without the prior written consent of the other Party, except to a successor by merger or sale of substantially all of its assets. If any provision is held unenforceable, the remaining provisions shall continue in full force and effect. This Agreement may be executed in counterparts.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.
+
+FENWICK OPTICAL CORPORATION
+
+By: _______________________________
+Name: Marianne T. Fenwick
+Title: Chief Executive Officer
+Date: _____________________________
+
+GABLE & SONS DISTRIBUTION LLC
+
+By: _______________________________
+Name: Robert A. Gable
+Title: Managing Member
+Date: _____________________________

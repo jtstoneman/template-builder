@@ -1,0 +1,41 @@
+MUTUAL NON-DISCLOSURE AGREEMENT
+
+This Mutual Non-Disclosure Agreement (this "Agreement") is entered into and effective as of May 17, 2024 (the "Effective Date"), by and between Ondine Hotels Group, a Delaware corporation with its principal place of business at 240 West 41st Street, New York, NY 10036 ("Ondine"), and Ravel Booking Systems, Inc., a Delaware corporation with its principal place of business at 88 Harrison Avenue, Boston, MA 02111 ("Ravel"). Ondine and Ravel are each a "Party" and together the "Parties." The Parties wish to explore a potential commercial relationship relating to hotel reservation and distribution technology (the "Purpose"), in connection with which each Party may disclose certain confidential information to the other.
+
+1. Definitions. "Confidential Information" means all non-public information, in any form or medium, disclosed by or on behalf of a Party (the "Disclosing Party") to the other Party (the "Receiving Party") in connection with the Purpose, whether before or after the Effective Date, that is designated as confidential or that a reasonable person would understand to be confidential given its nature and the circumstances of disclosure, including business plans, pricing, customer and guest data, occupancy and rate information, software, source code, system architecture, product roadmaps, and financial information.
+
+2. Exclusions. Confidential Information does not include information that the Receiving Party can demonstrate: (a) is or becomes generally known to the public through no breach of this Agreement by the Receiving Party; (b) was rightfully known to the Receiving Party, free of any obligation of confidentiality, prior to disclosure by the Disclosing Party; (c) is rightfully received by the Receiving Party from a third party without breach of any obligation of confidentiality; or (d) is independently developed by the Receiving Party without use of or reference to the Disclosing Party's Confidential Information.
+
+3. Confidentiality Obligations. The Receiving Party shall: (a) use the Disclosing Party's Confidential Information solely for the Purpose; (b) not disclose such Confidential Information to any third party, except to its employees, officers, directors, and professional advisors who have a need to know it for the Purpose and who are bound by confidentiality obligations at least as protective as those in this Agreement; and (c) protect such Confidential Information using at least the same degree of care it uses to protect its own confidential information of like kind, and in no event less than reasonable care. The Receiving Party is responsible for any breach of this Agreement by persons to whom it discloses Confidential Information.
+
+4. Compelled Disclosure. If the Receiving Party is required by law, regulation, or valid legal process to disclose Confidential Information, it may do so provided that, to the extent legally permitted, it gives the Disclosing Party prompt written notice and reasonable cooperation so that the Disclosing Party may seek a protective order or other appropriate remedy. Any such disclosure shall be limited to the portion of Confidential Information legally required to be disclosed and shall not otherwise relieve the Receiving Party of its obligations under Section 3.
+
+5. Residuals. Notwithstanding Section 3, the Receiving Party may use Residuals for any purpose, provided that such use does not infringe the Disclosing Party's patents or copyrights. "Residuals" means information in intangible form retained in the unaided memory of the Receiving Party's personnel who have had access to Confidential Information, where such personnel have not intentionally memorized the Confidential Information for the purpose of retaining and using it. Nothing in this Section 5 grants any license under any intellectual property rights of the Disclosing Party.
+
+6. No License; Return of Materials. All Confidential Information remains the property of the Disclosing Party. No license or other right is granted by this Agreement except as expressly stated herein. Upon the Disclosing Party's written request, the Receiving Party shall promptly return or destroy all Confidential Information in its possession, except that the Receiving Party may retain copies as required by law or bona fide document retention policies, subject to the continuing obligations of this Agreement, and subject in all cases to Section 5.
+
+7. Term and Survival. This Agreement commences on the Effective Date and continues for a period of one (1) year, unless earlier terminated by either Party upon thirty (30) days' written notice. The obligations of the Receiving Party under Sections 3 and 4 with respect to Confidential Information disclosed during the term shall survive for a period of three (3) years following expiration or termination of this Agreement.
+
+8. No Warranty; No Obligation. All Confidential Information is provided "AS IS." Neither Party makes any warranty regarding the accuracy or completeness of its Confidential Information. Nothing in this Agreement obligates either Party to proceed with any transaction or relationship.
+
+9. Remedies. Each Party acknowledges that a breach of this Agreement may cause the other Party irreparable harm for which monetary damages would be inadequate, and that the non-breaching Party shall be entitled to seek injunctive relief in addition to any other remedies available at law or in equity.
+
+10. Governing Law. This Agreement shall be governed by and construed in accordance with the laws of the State of New York, without regard to its conflict of laws principles. The Parties consent to the exclusive jurisdiction of the state and federal courts located in New York County, New York.
+
+11. Entire Agreement; Miscellaneous. This Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior or contemporaneous understandings regarding such subject matter. This Agreement may be amended only by a writing signed by both Parties. Neither Party may assign this Agreement without the prior written consent of the other Party, except to a successor in connection with a merger or sale of substantially all assets. If any provision is held unenforceable, the remaining provisions shall remain in full force and effect. This Agreement may be executed in counterparts, each of which is deemed an original.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.
+
+ONDINE HOTELS GROUP
+
+By: _______________________________
+Name: Margaux Delaunay
+Title: Chief Commercial Officer
+Date: _____________________________
+
+RAVEL BOOKING SYSTEMS, INC.
+
+By: _______________________________
+Name: Theodore Vasquez
+Title: Chief Executive Officer
+Date: _____________________________

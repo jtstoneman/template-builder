@@ -1,0 +1,41 @@
+NON-DISCLOSURE AGREEMENT
+
+This Non-Disclosure Agreement (this "Agreement") is entered into and effective as of July 1, 2023 (the "Effective Date"), by and between Bracken Hill Energy Corp., a corporation with its principal place of business at 2400 Ridgeline Parkway, Sacramento, California 95814 (the "Discloser"), and Moorland Grid Services, Inc., a corporation with its principal place of business at 880 Substation Way, Suite 300, Fresno, California 93721 (the "Recipient"). The Discloser wishes to disclose to the Recipient certain confidential information in connection with a potential grid interconnection and load-balancing services engagement (the "Purpose"), and the Recipient is willing to receive and protect such information on the terms set forth below.
+
+1. Definitions. "Confidential Information" means all non-public information disclosed by the Discloser to the Recipient, whether before or after the Effective Date, in written, oral, electronic, or other form, that is designated as confidential or that a reasonable person would understand to be confidential given the circumstances of disclosure, including, without limitation, technical data, transmission capacity figures, engineering studies, load forecasts, pricing models, business plans, financial information, and customer and supplier lists. "Representatives" means the Recipient's directors, officers, employees, and professional advisors who have a need to know Confidential Information for the Purpose.
+
+2. Confidentiality Obligations. The Recipient shall (a) hold all Confidential Information in strict confidence; (b) use it solely for the Purpose; (c) not disclose it to any third party without the Discloser's prior written consent, except to Representatives bound by confidentiality obligations at least as protective as those in this Agreement; and (d) protect it with at least the degree of care it uses for its own confidential information, and in no event less than reasonable care. The Recipient is responsible for any breach of this Agreement by its Representatives.
+
+3. Exclusions. The obligations in Section 2 do not apply to information that the Recipient can demonstrate: (a) is or becomes publicly known through no fault of the Recipient; (b) was rightfully in its possession without restriction prior to disclosure by the Discloser; (c) is rightfully received from a third party without breach of any confidentiality obligation; or (d) is independently developed without use of or reference to the Confidential Information.
+
+4. Compelled Disclosure. If the Recipient is required by law, regulation, or valid order of a court or governmental authority to disclose Confidential Information, the Recipient may make such disclosure without breaching Section 2, provided that the Recipient, to the extent legally permitted, gives the Discloser prompt written notice sufficient to allow the Discloser to seek a protective order, and discloses only that portion of the Confidential Information legally required to be disclosed.
+
+5. Non-Solicitation. During the term of this Agreement and for eighteen (18) months following its expiration or termination, the Recipient shall not, directly or indirectly, solicit for employment any employee of the Discloser with whom the Recipient had material contact in connection with the Purpose. This Section 5 does not prohibit general solicitations, such as public job postings, not directed specifically at the Discloser's employees.
+
+6. Return or Destruction of Materials. Upon the Discloser's written request, or upon expiration or termination of this Agreement, the Recipient shall promptly return or destroy all Confidential Information and all copies and notes thereof and certify such return or destruction in writing, except that the Recipient may retain one archival copy as required by law, subject at all times to Section 2.
+
+7. Term and Survival. This Agreement commences on the Effective Date and continues for four (4) years, unless earlier terminated by either party upon thirty (30) days' prior written notice. The Recipient's obligations under Sections 2 through 6 survive any expiration or termination for so long as the information remains Confidential Information, and Section 5 survives for the period stated therein.
+
+8. Injunctive Relief. The Recipient acknowledges that any breach or threatened breach of this Agreement may cause the Discloser irreparable harm for which monetary damages would be inadequate. Accordingly, the Discloser shall be entitled to seek injunctive relief and specific performance, without posting a bond, in addition to any other remedies available at law or in equity.
+
+9. No License; No Warranty. Nothing in this Agreement grants the Recipient any license or other right in or to the Confidential Information except the limited right to use it for the Purpose as set forth in Section 2. ALL CONFIDENTIAL INFORMATION IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND.
+
+10. Governing Law. This Agreement shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of laws principles. The parties consent to the exclusive jurisdiction of the state and federal courts located in Sacramento County, California.
+
+11. Entire Agreement; Miscellaneous. This Agreement constitutes the entire agreement of the parties with respect to its subject matter and supersedes all prior agreements and understandings relating thereto. No amendment or waiver is effective unless in writing and signed by both parties. If any provision is held unenforceable, the remaining provisions continue in full force and effect. The Recipient may not assign this Agreement without the Discloser's prior written consent.
+
+IN WITNESS WHEREOF, the parties have executed this Agreement as of the Effective Date.
+
+BRACKEN HILL ENERGY CORP.
+
+By: _________________________
+Name: Eleanor Voss
+Title: Vice President, Commercial Development
+Date: _______________________
+
+MOORLAND GRID SERVICES, INC.
+
+By: _________________________
+Name: Rajan Mehta
+Title: Chief Operating Officer
+Date: _______________________

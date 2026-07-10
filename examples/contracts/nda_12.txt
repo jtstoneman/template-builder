@@ -1,0 +1,41 @@
+MUTUAL NON-DISCLOSURE AGREEMENT
+
+This Mutual Non-Disclosure Agreement (this "Agreement") is entered into and effective as of December 2, 2023 (the "Effective Date"), by and between Thornbury Consulting Group LLC, a limited liability company with its principal place of business at 1440 Marsh Landing Parkway, Suite 210, Sacramento, California ("Thornbury"), and Mistral Data Works, Inc., a corporation with its principal place of business at 88 Colin P. Kelly Jr. Street, San Francisco, California ("Mistral"). Thornbury and Mistral are each referred to herein as a "Party" and collectively as the "Parties." The Parties wish to explore a potential business relationship relating to data analytics consulting services (the "Purpose"), in connection with which each Party may disclose to the other certain confidential and proprietary information.
+
+1. Definitions. "Confidential Information" means any non-public information disclosed by one Party (the "Disclosing Party") to the other Party (the "Receiving Party"), whether orally, in writing, electronically, or by inspection of tangible objects, that is designated as confidential or that reasonably should be understood to be confidential given the nature of the information and the circumstances of disclosure, including without limitation business plans, financial information, customer and supplier lists, pricing, technical data, software, algorithms, product roadmaps, personnel information, and the existence and terms of the Parties' discussions.
+
+2. Exclusions. Confidential Information does not include information that the Receiving Party can demonstrate: (a) is or becomes publicly known through no breach of this Agreement by the Receiving Party; (b) was rightfully in the Receiving Party's possession without restriction prior to disclosure by the Disclosing Party; (c) is rightfully received by the Receiving Party from a third party without a duty of confidentiality; or (d) is independently developed by the Receiving Party without use of or reference to the Disclosing Party's Confidential Information.
+
+3. Confidentiality Obligations. The Receiving Party shall: (a) use the Disclosing Party's Confidential Information solely for the Purpose; (b) not disclose such Confidential Information to any third party without the Disclosing Party's prior written consent, except to its employees, officers, and professional advisors who have a need to know such information for the Purpose and who are bound by confidentiality obligations at least as protective as those in this Agreement; and (c) protect such Confidential Information using at least the same degree of care it uses to protect its own confidential information of similar nature, and in no event less than reasonable care.
+
+4. Compelled Disclosure. If the Receiving Party is required by law, regulation, or valid order of a court or governmental authority to disclose Confidential Information, it may do so, provided that, to the extent legally permitted, it gives the Disclosing Party prompt written notice of the requirement and reasonably cooperates, at the Disclosing Party's expense, with any effort to seek a protective order or other appropriate remedy. Any disclosure made pursuant to this Section 4 shall be limited to the information legally required to be disclosed.
+
+5. Non-Solicitation. During the term of this Agreement and for a period of twelve (12) months thereafter, neither Party shall, directly or indirectly, solicit for employment or engagement any employee of the other Party with whom it had material contact in connection with the Purpose. Nothing in this Section 5 prohibits general solicitations not specifically targeted at such employees, including public job postings, or the hiring of persons who respond thereto.
+
+6. Term and Survival. This Agreement shall commence on the Effective Date and continue for a period of three (3) years, unless earlier terminated by either Party upon thirty (30) days' prior written notice. The obligations set forth in Section 3 with respect to Confidential Information disclosed during the term shall survive any expiration or termination of this Agreement for a period of [NOTE: confirm survival period] following such expiration or termination; provided that obligations with respect to trade secrets shall survive for so long as such information remains a trade secret under applicable law.
+
+7. Return or Destruction. Upon the Disclosing Party's written request or upon expiration or termination of this Agreement, the Receiving Party shall promptly return or destroy all Confidential Information of the Disclosing Party in its possession, except that the Receiving Party may retain one archival copy solely for legal compliance purposes, subject to the continuing obligations of Section 3.
+
+8. No License; No Obligation. Nothing in this Agreement grants either Party any license or other rights in or to the other Party's Confidential Information, except the limited right to use such information for the Purpose. Neither Party is obligated to disclose any information or to enter into any further agreement.
+
+9. Remedies. Each Party acknowledges that unauthorized disclosure or use of Confidential Information may cause irreparable harm for which monetary damages would be inadequate, and that the Disclosing Party shall be entitled to seek injunctive relief, in addition to any other remedies available at law or in equity, without the necessity of posting a bond.
+
+10. Governing Law. This Agreement shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of laws principles. The Parties consent to the exclusive jurisdiction of the state and federal courts located in San Francisco County, California.
+
+11. Entire Agreement; Miscellaneous. This Agreement constitutes the entire agreement between the Parties concerning its subject matter and supersedes all prior agreements and understandings, whether written or oral, relating thereto. This Agreement may be amended only by a written instrument signed by both Parties. Neither Party may assign this Agreement without the prior written consent of the other Party. If any provision of this Agreement is held unenforceable, the remaining provisions shall continue in full force and effect. This Agreement may be executed in counterparts, each of which shall be deemed an original.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.
+
+THORNBURY CONSULTING GROUP LLC
+
+By: _________________________
+Name: Eleanor V. Thornbury
+Title: Managing Member
+Date: _______________________
+
+MISTRAL DATA WORKS, INC.
+
+By: _________________________
+Name: Rajiv Menon
+Title: Chief Executive Officer
+Date: _______________________

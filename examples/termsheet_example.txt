@@ -1,0 +1,14 @@
+DEAL MEMO — proposed NDA
+
+We're opening technical due-diligence discussions with Halloway Marine
+Systems, Inc. Both sides will be sharing material (they show us their sonar
+firmware roadmap, we show them our integration test data), so this needs to
+be mutual.
+
+Counterparty: Halloway Marine Systems, Inc.
+Our entity:   Meridian Analytics, Inc.
+Kick-off:     1 September 2026 (use as effective date)
+Term:         three years
+Governing law: New York — their GC insisted.
+
+Nothing agreed yet on non-solicitation; leave it out unless standard.

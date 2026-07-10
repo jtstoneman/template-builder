@@ -1,0 +1,41 @@
+MUTUAL NON-DISCLOSURE AGREEMENT
+
+This Mutual Non-Disclosure Agreement (this "Agreement") is entered into and made effective as of November 8, 2022 (the "Effective Date"), by and between Kestrel Aerospace Ltd., a company organized under the laws of the State of Texas with its principal place of business at 4410 Falcon Ridge Parkway, Fort Worth, Texas 76118 ("Kestrel"), and Dunmore Logistics, Inc., a Delaware corporation with its principal place of business at 900 Harbor Line Drive, Suite 300, Houston, Texas 77002 ("Dunmore"). Kestrel and Dunmore are each referred to herein as a "Party" and together as the "Parties." The Parties wish to explore a potential business relationship concerning aerospace component distribution and supply-chain services (the "Purpose"), in connection with which each Party may disclose certain confidential information to the other.
+
+1. DEFINITIONS. "Confidential Information" means any and all non-public information, in whatever form or medium, disclosed by or on behalf of a Party (the "Disclosing Party") to the other Party (the "Receiving Party") in connection with the Purpose, whether before or after the Effective Date, including without limitation technical data, engineering drawings, specifications, prototypes, software, business plans, pricing, customer and supplier lists, financial information, and personnel information, whether or not marked as confidential, provided that information disclosed orally shall be Confidential Information if identified as confidential at the time of disclosure or if a reasonable person would understand it to be confidential from its nature or the circumstances of disclosure.
+
+2. CONFIDENTIALITY OBLIGATIONS. The Receiving Party shall (a) hold the Disclosing Party's Confidential Information in strict confidence and protect it with at least the same degree of care it uses to protect its own confidential information, and in no event less than reasonable care; (b) use such Confidential Information solely for the Purpose; and (c) not disclose such Confidential Information to any third party except to its employees, officers, directors, and professional advisors who have a need to know it for the Purpose and who are bound by confidentiality obligations at least as protective as those in this Agreement. The Receiving Party shall be responsible for any breach of this Agreement by any person to whom it discloses Confidential Information.
+
+3. EXCLUSIONS. The obligations in Section 2 shall not apply to information that the Receiving Party can demonstrate: (a) is or becomes generally known to the public through no fault of the Receiving Party; (b) was rightfully known to the Receiving Party, free of any obligation of confidentiality, prior to disclosure by the Disclosing Party; (c) is rightfully received by the Receiving Party from a third party without restriction and without breach of any obligation of confidentiality; or (d) is independently developed by the Receiving Party without use of or reference to the Disclosing Party's Confidential Information.
+
+4. COMPELLED DISCLOSURE. If the Receiving Party is required by law, regulation, or valid court or governmental order to disclose Confidential Information, it may do so, provided that it gives the Disclosing Party prompt written notice (to the extent legally permitted) and reasonable cooperation so that the Disclosing Party may seek a protective order or other appropriate remedy, and discloses only that portion of the Confidential Information that it is legally required to disclose.
+
+5. NO LICENSE. Nothing in this Agreement grants or shall be construed as granting to either Party any license, right, title, or interest in or to any Confidential Information, patents, trademarks, copyrights, trade secrets, or other intellectual property of the other Party, whether by implication, estoppel, or otherwise. All Confidential Information remains the property of the Disclosing Party.
+
+6. NON-SOLICITATION. During the term of this Agreement and for a period of twelve (12) months thereafter, neither Party shall, directly or indirectly, solicit for employment or hire any employee of the other Party who was directly involved in the Purpose, provided that nothing in this Section 6 shall prohibit general solicitations of employment (such as job postings) not specifically directed at the other Party's employees, or the hiring of any person who responds thereto.
+
+7. TERM; SURVIVAL. This Agreement shall commence on the Effective Date and continue for a period of three (3) years, unless earlier terminated by either Party upon thirty (30) days' prior written notice. The obligations set forth in Sections 2 through 5 shall survive any expiration or termination of this Agreement for three (3) years thereafter; provided that obligations with respect to trade secrets shall survive for so long as such information remains a trade secret under applicable law.
+
+8. RETURN OF MATERIALS. Upon the Disclosing Party's written request or upon expiration or termination of this Agreement, the Receiving Party shall, subject to Section 4, promptly return or destroy all Confidential Information of the Disclosing Party and certify such return or destruction in writing.
+
+9. REMEDIES. Each Party acknowledges that unauthorized disclosure or use of Confidential Information may cause irreparable harm for which monetary damages would be inadequate, and that the Disclosing Party shall be entitled to seek injunctive relief in addition to any other remedies available at law or in equity.
+
+10. GOVERNING LAW. This Agreement shall be governed by and construed in accordance with the laws of the State of Texas, without regard to its conflict of laws principles. The Parties consent to the exclusive jurisdiction of the state and federal courts located in Tarrant County, Texas.
+
+11. ENTIRE AGREEMENT; MISCELLANEOUS. This Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior agreements and understandings, whether written or oral, relating thereto. No amendment or waiver shall be effective unless in writing and signed by both Parties. Neither Party may assign this Agreement without the prior written consent of the other Party. If any provision is held unenforceable, the remaining provisions shall remain in full force and effect. This Agreement may be executed in counterparts, each of which shall be deemed an original.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.
+
+KESTREL AEROSPACE LTD.
+
+By: _________________________
+Name: Alan R. Whitfield
+Title: Chief Operating Officer
+Date: _______________________
+
+DUNMORE LOGISTICS, INC.
+
+By: _________________________
+Name: Priya Natarajan
+Title: Vice President, Commercial Operations
+Date: _______________________

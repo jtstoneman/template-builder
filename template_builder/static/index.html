@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>template-builder</title>
+<style>
+  :root {
+    --bg: #faf9f7; --panel: #ffffff; --ink: #1c1b18; --muted: #71706a;
+    --line: #e7e5e0; --accent: #1f5f4e; --accent-ink: #ffffff;
+    --ok-bg: #e8f3ec; --ok-ink: #1a6b3c; --warn-bg: #fdf3e0; --warn-ink: #9a6511;
+    --off-bg: #f0efec; --off-ink: #71706a; --err-bg: #fbeceb; --err-ink: #a13c32;
+    --mono: ui-monospace, "SF Mono", Menlo, monospace;
+    --serif: "Iowan Old Style", Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  header {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    padding: 18px 28px 0;
+  }
+  header h1 { font-size: 19px; font-weight: 650; margin: 0; letter-spacing: -0.01em; }
+  header .summary { color: var(--muted); font-size: 13px; }
+  header .actions { margin-left: auto; display: flex; gap: 8px; }
+  header a.back { font-size: 13px; color: var(--accent); text-decoration: none; cursor: pointer; }
+  nav.tabs { display: flex; gap: 22px; padding: 10px 28px 0; border-bottom: 1px solid var(--line); }
+  nav.tabs button {
+    background: none; border: none; padding: 8px 2px 10px; font: inherit; font-size: 14px;
+    color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  nav.tabs button.active { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+
+  main { padding: 22px 28px 80px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  button.btn {
+    font: inherit; font-size: 13.5px; padding: 6px 14px; border-radius: 7px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+  }
+  button.btn:hover { border-color: #cfcdc6; }
+  button.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  button.btn.primary:hover { filter: brightness(1.08); }
+  button.btn.small { font-size: 12.5px; padding: 3px 10px; }
+  button.btn:disabled { opacity: 0.5; cursor: default; }
+
+  .chip {
+    display: inline-block; font-size: 10.5px; font-weight: 650; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 99px; vertical-align: 2px;
+  }
+  .chip.approved { background: var(--ok-bg); color: var(--ok-ink); }
+  .chip.stale { background: var(--warn-bg); color: var(--warn-ink); }
+  .chip.unapproved { background: var(--off-bg); color: var(--off-ink); }
+  .chip.edited { background: var(--err-bg); color: var(--err-ink); }
+  .chip.cond { background: #eef1fb; color: #3b4c9b; text-transform: none; letter-spacing: 0; font-family: var(--mono); font-weight: 500; }
+
+  .cols { display: grid; grid-template-columns: 330px 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+  .panel h2 {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin: 0; padding: 12px 16px; border-bottom: 1px solid var(--line);
+  }
+  .panel .body { padding: 14px 16px; }
+
+  /* home */
+  .home-grid { display: grid; grid-template-columns: 1fr 420px; gap: 26px; align-items: start; }
+  @media (max-width: 980px) { .home-grid { grid-template-columns: 1fr; } }
+  .tcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .tcard {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px; cursor: pointer; transition: border-color 0.15s;
+  }
+  .tcard:hover { border-color: var(--accent); }
+  .tcard .doc { font-weight: 600; margin-bottom: 2px; }
+  .tcard .file { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-bottom: 10px; }
+  .tcard .meta { font-size: 12.5px; color: var(--muted); }
+  input[type=text], select, textarea {
+    width: 100%; font: inherit; font-size: 13.5px; padding: 6px 9px;
+    border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--ink);
+  }
+  input:focus, select:focus, textarea:focus { outline: 2px solid #b9d6cc; border-color: var(--accent); }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 4px; }
+  .filerow {
+    display: grid; grid-template-columns: minmax(110px, 38%) 1fr; gap: 8px;
+    align-items: center; margin-bottom: 7px;
+  }
+  .filerow .fname { font-family: var(--mono); font-size: 11.5px; overflow-wrap: anywhere; }
+  #build-log {
+    font-family: var(--mono); font-size: 11.5px; background: #14211d; color: #cfe8dd;
+    border-radius: 8px; padding: 12px 14px; max-height: 260px; overflow-y: auto;
+    white-space: pre-wrap; display: none;
+  }
+  #drop {
+    border: 1.5px dashed var(--line); border-radius: 8px; padding: 18px; text-align: center;
+    color: var(--muted); font-size: 13px; cursor: pointer; margin-bottom: 12px;
+  }
+  #drop.drag { border-color: var(--accent); color: var(--accent); }
+
+  /* questionnaire */
+  .q { margin-bottom: 14px; }
+  .q label.q-label { display: block; font-size: 13px; color: var(--ink); margin-bottom: 4px; }
+  .q .name { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .q.bool { display: flex; gap: 9px; align-items: flex-start; }
+  .q.bool input { margin-top: 3px; accent-color: var(--accent); width: auto; }
+  details.intake { margin-bottom: 16px; }
+  details.intake summary { cursor: pointer; font-size: 13px; color: var(--accent); }
+  details.intake textarea { margin: 8px 0; min-height: 110px; resize: vertical; }
+
+  /* clauses */
+  .clause { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; margin-bottom: 14px; }
+  .clause .head {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    padding: 11px 16px; border-bottom: 1px solid var(--line);
+  }
+  .clause .head .cid { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .clause .head .heading { font-weight: 600; font-size: 14.5px; }
+  .variant { padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .variant:last-child { border-bottom: none; }
+  .variant .vhead { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .variant .vid { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .variant .vtext { font-family: var(--serif); font-size: 14px; white-space: pre-wrap; color: #2b2a26; }
+  .variant .vtext code.ph {
+    font-family: var(--mono); font-size: 12px; background: #eef1fb; color: #3b4c9b;
+    padding: 0 4px; border-radius: 4px;
+  }
+  .variant textarea { min-height: 140px; font-family: var(--serif); font-size: 13.5px; resize: vertical; }
+  .variant .editbar { display: flex; gap: 8px; margin-top: 8px; }
+  .provenance { font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+  .deps { padding: 9px 16px; border-top: 1px dashed var(--line); background: #fbfaf7; }
+  .deps .dep { font-size: 12px; color: var(--muted); margin: 2px 0; }
+  .deps .dep b { color: #3b4c9b; font-weight: 600; font-family: var(--mono); font-size: 11px; }
+  .deps .dep .did { font-family: var(--mono); font-size: 11px; color: var(--ink); }
+
+  .notice { border-radius: 9px; padding: 10px 14px; font-size: 13.5px; margin: 0 0 16px; }
+  .notice.err { background: var(--err-bg); color: var(--err-ink); }
+  .notice.ok { background: var(--ok-bg); color: var(--ok-ink); }
+  .notice.warn { background: var(--warn-bg); color: var(--warn-ink); }
+  .notice ul { margin: 6px 0 0; padding-left: 20px; }
+  .notice.hidden, .hidden { display: none; }
+
+  /* document view */
+  .docbar { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+  .docbar .spacer { flex: 1; }
+  .page {
+    max-width: 780px; margin: 0 auto; background: var(--panel);
+    border: 1px solid var(--line); border-radius: 4px; padding: 64px 72px;
+    font-family: var(--serif); color: #23221e;
+  }
+  @media (max-width: 700px) { .page { padding: 28px 22px; } }
+  .page h1.doctitle { font-size: 21px; text-align: center; letter-spacing: 0.02em; margin: 0 0 34px; }
+  .doc-clause { margin-bottom: 26px; }
+  .doc-clause .dhead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+  .doc-clause .dhead h3 { font-size: 15px; margin: 0; }
+  .doc-clause .dhead .tools { margin-left: auto; opacity: 0; transition: opacity 0.15s; display: flex; gap: 6px; align-items: center; }
+  .doc-clause:hover .dhead .tools { opacity: 1; }
+  .doc-clause .dbody { font-size: 14.5px; line-height: 1.65; }
+  .doc-clause .dbody:focus { outline: 2px solid #b9d6cc; outline-offset: 6px; border-radius: 2px; }
+  .doc-clause .dbody p { margin: 0 0 10px; }
+  .doc-clause .dbody ul, .doc-clause .dbody ol { margin: 0 0 10px; padding-left: 26px; }
+  .doc-clause .dbody li { margin: 0 0 4px; }
+
+  /* formatting toolbar */
+  .fmtbar { display: flex; gap: 4px; align-items: center; }
+  .fmtbar .label { font-size: 11px; color: var(--muted); text-transform: uppercase;
+                   letter-spacing: 0.06em; margin-right: 4px; }
+  .fmtbar button {
+    font: inherit; width: 30px; height: 27px; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+    font-size: 13px; line-height: 1;
+  }
+  .fmtbar button:hover { border-color: var(--accent); }
+  .fmtbar button.b { font-weight: 700; }
+  .fmtbar button.i { font-style: italic; font-family: var(--serif); }
+  .fmtbar button.u { text-decoration: underline; }
+  .doc-clause.edited .dhead h3::after { content: " •"; color: var(--err-ink); }
+  .empty { color: var(--muted); text-align: center; padding: 60px 0; font-size: 14px; }
+
+  dialog#report-dialog {
+    max-width: 860px; width: 90vw; max-height: 84vh; border: 1px solid var(--line);
+    border-radius: 12px; padding: 26px 30px; background: var(--panel); color: var(--ink);
+  }
+  dialog#report-dialog::backdrop { background: rgba(20, 25, 22, 0.45); }
+  dialog#report-dialog pre { white-space: pre-wrap; font-family: var(--mono); font-size: 12px; line-height: 1.6; }
+
+  /* escalation inbox + matters */
+  .esc { border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; margin-bottom: 10px; }
+  .esc .head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; margin-bottom: 6px; }
+  .esc .head .m { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .esc .head .c { font-weight: 600; }
+  .esc details { font-size: 13px; color: #2b2a26; }
+  .esc .xt { margin: 6px 0 0 12px; font-size: 12.5px; line-height: 1.5;
+             white-space: pre-wrap; }
+  .esc .xt b { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; }
+  .esc details summary { cursor: pointer; color: var(--muted); font-size: 12.5px; }
+  .esc .actions { display: flex; gap: 8px; margin-top: 8px; }
+  .mrow { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap;
+          padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .mrow:last-child { border-bottom: none; }
+  .mrow .mid { font-family: var(--mono); font-size: 12px; }
+  .mrow .meta { color: var(--muted); font-size: 12px; }
+  .mrow .spacer { flex: 1; }
+</style>
+</head>
+<body>
+  <header>
+    <h1 id="title">template-builder</h1>
+    <span class="summary" id="status-summary"></span>
+    <div class="actions" id="template-actions" style="display:none">
+      <a class="back" id="btn-home">← All templates</a>
+      <button class="btn" id="btn-playbook" style="display:none">Playbook</button>
+      <button class="btn" id="btn-report" style="display:none">Report</button>
+      <button class="btn" id="btn-validate">Validate</button>
+      <button class="btn primary" id="btn-approve">Approve…</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" style="display:none">
+    <button id="tab-template" class="active">Template</button>
+    <button id="tab-document">Document</button>
+  </nav>
+
+  <main>
+    <div id="demo-banner" class="notice warn hidden"></div>
+    <div id="banner" class="notice hidden"></div>
+
+    <!-- ------------------------------------------------------------ home -->
+    <section id="view-home" class="view active">
+      <div id="inbox-panel" class="panel hidden" style="margin-bottom:26px; border-color:#e7c88a">
+        <h2>Escalations — awaiting a human decision</h2>
+        <div class="body" id="inbox"></div>
+      </div>
+      <div class="home-grid">
+        <div>
+          <div class="panel">
+            <h2>Templates</h2>
+            <div class="body">
+              <div class="tcards" id="tcards"></div>
+              <div class="empty" id="no-templates" style="display:none; padding: 24px 0">
+                No templates yet — build your first one from a corpus of precedent contracts.
+              </div>
+              <div style="display:flex; gap:8px; margin-top:14px">
+                <button class="btn small" id="btn-exceptions">Exception register</button>
+                <button class="btn small" id="btn-drift">Drift report</button>
+              </div>
+            </div>
+          </div>
+          <div id="matters-panel" class="panel hidden" style="margin-top:26px">
+            <h2>Matters</h2>
+            <div class="body" id="matters"></div>
+          </div>
+        </div>
+        <div>
+          <div class="panel">
+            <h2>New template from precedent contracts</h2>
+            <div class="body">
+              <div class="field">
+                <label for="nb-doctype">Document type</label>
+                <input type="text" id="nb-doctype" placeholder="e.g. Share Purchase Agreement">
+              </div>
+              <div class="field">
+                <label for="nb-name">Template name (file)</label>
+                <input type="text" id="nb-name" placeholder="share-purchase-agreement">
+              </div>
+              <div id="drop">
+                Drop your precedent contracts here, or click to choose files
+                <div style="font-size:11.5px; margin-top:4px">(.txt · .md · .docx · .pdf — the more the better; 20–30 is ideal)</div>
+              </div>
+              <input type="file" id="nb-files" multiple accept=".txt,.md,.docx,.pdf" style="display:none">
+              <div id="filerows"></div>
+              <p id="ctx-hint" class="hidden" style="font-size:12px; color:var(--muted); margin:6px 0 12px">
+                Add <b>deal context</b> per document — "seller-friendly", "W&amp;I insurance",
+                "distressed sale, tight timetable"… The decompiler uses it to infer <i>why</i>
+                drafting differs and turns those dimensions into questionnaire variables that
+                condition the affected clauses.
+              </p>
+              <button class="btn primary" id="btn-build" style="width:100%" disabled>Build template</button>
+              <pre id="build-log"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------- template -->
+    <section id="view-template" class="view">
+      <div class="cols">
+        <div>
+          <div class="panel">
+            <h2>Questionnaire</h2>
+            <div class="body">
+              <details class="intake">
+                <summary>Pre-fill from a term sheet</summary>
+                <textarea id="intake-text" placeholder="Paste the term sheet or deal memo…"></textarea>
+                <button class="btn small" id="btn-intake">Extract answers</button>
+              </details>
+              <form id="questionnaire"></form>
+              <button class="btn primary" id="btn-render" style="width:100%; margin-top:6px">
+                Generate document →
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="clauses"></div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------- document -->
+    <section id="view-document" class="view">
+      <div class="docbar">
+        <span class="summary" id="doc-status"></span>
+        <div class="spacer"></div>
+        <div class="fmtbar" id="fmtbar" title="Formatting is exported to .docx; it marks the clause as hand-edited">
+          <span class="label">Format</span>
+          <button class="b" data-cmd="bold" title="Bold (⌘B)">B</button>
+          <button class="i" data-cmd="italic" title="Italic (⌘I)">I</button>
+          <button class="u" data-cmd="underline" title="Underline (⌘U)">U</button>
+          <button data-cmd="insertUnorderedList" title="Bullet list">•≡</button>
+          <button data-cmd="insertOrderedList" title="Numbered list">1≡</button>
+        </div>
+        <button class="btn" id="btn-regenerate">Regenerate from answers</button>
+        <button class="btn primary" id="btn-download">Download .docx</button>
+      </div>
+      <div id="deviations" class="notice warn hidden"></div>
+      <div id="doc-unapproved" class="notice warn hidden"></div>
+      <div class="page" id="page">
+        <div class="empty">Answer the questionnaire and press “Generate document”.</div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="report-dialog">
+    <div style="display:flex; align-items:baseline; margin-bottom:12px">
+      <strong id="report-title">Build report</strong>
+      <button class="btn small" style="margin-left:auto" onclick="this.closest('dialog').close()">Close</button>
+    </div>
+    <pre id="report-body"></pre>
+  </dialog>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const state = {
+  name: null,            // current template name (null on home)
+  template: null,        // /api/t/{name} payload
+  rendered: null,        // last render payload
+  baseline: new Map(),   // clause id -> deterministic rendered text
+  pickedFiles: [],       // File objects staged in the new-template wizard
+};
+
+/* ---------------------------------------------------------------- utils */
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const highlight = (s) => esc(s).replace(/\{\{[^}]*\}\}/g, (m) => `<code class="ph">${m}</code>`);
+const api = async (path, body) => {
+  const opts = body === undefined ? {} :
+    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) };
+  const res = await fetch(path, opts);
+  if (!res.ok) {
+    let detail;
+    try { detail = (await res.json()).detail; } catch { detail = res.statusText; }
+    throw Object.assign(new Error("api"), { detail, status: res.status });
+  }
+  return res.json();
+};
+const t = (suffix) => `/api/t/${encodeURIComponent(state.name)}${suffix}`;
+// safe error reader for raw fetch() paths: never throws on a non-JSON body
+const readError = (res) =>
+  res.json().then((b) => String(b.detail || res.statusText)).catch(() => res.statusText);
+
+function banner(kind, text, items) {
+  const el = $("banner");
+  if (!kind) { el.className = "notice hidden"; el.innerHTML = ""; return; }
+  el.className = `notice ${kind}`;
+  el.innerHTML = esc(text) +
+    (items && items.length ? `<ul>${items.map((i) => `<li>${esc(String(i))}</li>`).join("")}</ul>` : "");
+}
+
+/* ----------------------------------------------------------------- views */
+function show(view) {  // "home" | "template" | "document"
+  for (const v of ["home", "template", "document"]) {
+    $(`view-${v}`).classList.toggle("active", v === view);
+  }
+  $("tabs").style.display = view === "home" ? "none" : "flex";
+  $("template-actions").style.display = view === "home" ? "none" : "flex";
+  $("tab-template").classList.toggle("active", view === "template");
+  $("tab-document").classList.toggle("active", view === "document");
+  if (view === "home") {
+    $("title").textContent = "template-builder";
+    $("status-summary").textContent = "";
+  }
+}
+$("tab-template").addEventListener("click", () => show("template"));
+$("tab-document").addEventListener("click", () => show("document"));
+$("btn-home").addEventListener("click", () => { banner(null); state.name = null; loadHome(); });
+
+/* ------------------------------------------------------------------ home */
+async function loadHome() {
+  show("home");
+  const [templates, matters, escalations] = await Promise.all([
+    api("/api/templates"), api("/api/matters"), api("/api/escalations")]);
+  const host = $("tcards");
+  host.innerHTML = "";
+  $("no-templates").style.display = templates.length ? "none" : "block";
+  for (const s of templates) {
+    const card = document.createElement("div");
+    card.className = "tcard";
+    const chips = [];
+    if (s.stale) chips.push(`<span class="chip stale">${s.stale} stale</span>`);
+    if (s.unapproved) chips.push(`<span class="chip unapproved">${s.unapproved} unapproved</span>`);
+    if (!s.stale && !s.unapproved) chips.push(`<span class="chip approved">approved</span>`);
+    card.innerHTML = `
+      <div class="doc">${esc(s.doc_type)}</div>
+      <div class="file">${esc(s.name)}.json</div>
+      <div class="meta">${s.clauses} clauses · ${s.variables} variables</div>
+      <div style="margin-top:8px; display:flex; align-items:center; gap:6px">${chips.join(" ")}
+        <button class="btn small" data-intake="${esc(s.name)}"
+                style="margin-left:auto" title="Copy the client intake link">intake link</button>
+      </div>`;
+    card.addEventListener("click", () => openTemplate(s.name));
+    card.querySelector("[data-intake]").addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const url = `${location.origin}/intake/${encodeURIComponent(s.name)}`;
+      try {
+        await navigator.clipboard.writeText(url);
+        banner("ok", `Client intake link copied: ${url}`);
+      } catch {
+        // clipboard unavailable (non-secure origin): show it for manual copy
+        banner("warn", `Copy the client intake link: ${url}`);
+      }
+    });
+    host.appendChild(card);
+  }
+  renderMatters(matters);
+  renderInbox(escalations);
+}
+
+function renderMatters(matters) {
+  $("matters-panel").classList.toggle("hidden", !matters.length);
+  const host = $("matters");
+  host.innerHTML = "";
+  for (const m of matters) {
+    const row = document.createElement("div");
+    row.className = "mrow";
+    row.innerHTML = `
+      <span class="mid">${esc(m.id)}</span>
+      <span>${esc(m.counterparty)}</span>
+      <span class="chip ${m.status === "intake" ? "stale" : "cond"}">${esc(m.status)}</span>
+      <span class="meta">${m.rounds} round(s) · ${m.deviations} deviation(s)</span>
+      ${m.pending_escalations ? `<span class="chip edited">${m.pending_escalations} escalated</span>` : ""}
+      <span class="spacer"></span>
+      ${m.status === "intake" || m.status === "open"
+        ? `<button class="btn small" data-round>Ingest round…</button>
+           <button class="btn small" data-close title="close as agreed or abandoned">Close…</button>`
+        : ""}`;
+    row.querySelector("[data-round]")?.addEventListener("click", () => uploadRound(m.id));
+    row.querySelector("[data-close]")?.addEventListener("click", () => closeMatter(m));
+    host.appendChild(row);
+  }
+}
+
+async function closeMatter(m) {
+  const agreed = confirm(`Close ${m.id}.\nOK = agreed (terms settled) · Cancel = abandoned`);
+  const by = prompt("Closing as (name/email):");
+  if (!by) return;
+  const why = prompt("Why? (journaled)") || "";
+  const res = await fetch(`/api/matters/${encodeURIComponent(m.id)}/close`, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status: agreed ? "agreed" : "abandoned", by, why }),
+  });
+  if (!res.ok) {
+    banner("err", await readError(res));
+    return;
+  }
+  banner("ok", `${m.id} closed as ${agreed ? "agreed" : "abandoned"}`);
+  await loadHome();
+}
+
+async function uploadRound(matterId) {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".docx,.txt,.md,.pdf";
+  input.addEventListener("change", async () => {
+    if (!input.files.length) return;
+    const negotiate = confirm("Run the playbook-gated negotiator on this round?\n" +
+      "(OK = negotiate: mature accepts auto-record, the rest escalates. " +
+      "Cancel = just diff the document.)");
+    const form = new FormData();
+    form.append("file", input.files[0]);
+    form.append("negotiate", negotiate ? "true" : "false");
+    banner("ok", "Ingesting the returned document…");
+    let res;
+    try {
+      res = await fetch(`/api/matters/${encodeURIComponent(matterId)}/round`,
+                        { method: "POST", body: form });
+    } catch {
+      banner("err", "Could not reach the server — the round was not ingested.");
+      return;
+    }
+    if (!res.ok) {
+      banner("err", await readError(res));
+      return;
+    }
+    const matter = await res.json();
+    const round = matter.rounds[matter.rounds.length - 1];
+    banner("ok", `Round ${round.number}: ${round.asks.length} clause-anchored ask(s)` +
+      (round.unanchored.length ? `, ${round.unanchored.length} unanchored — review manually` : "") +
+      (round.plan_summary ? ` — ${round.plan_summary}` : ""));
+    await loadHome();
+  });
+  input.click();
+}
+
+function renderInbox(escalations) {
+  $("inbox-panel").classList.toggle("hidden", !escalations.length);
+  const host = $("inbox");
+  host.innerHTML = "";
+  for (const e of escalations) {
+    const item = document.createElement("div");
+    item.className = "esc";
+    // the decision must be made looking at the actual texts, not just the
+    // assistant's summary: OURS, THEIRS (what "Accept theirs" commits), and
+    // any counter-draft the assistant proposed
+    const theirs = e.ask_kind === "delete"
+      ? `<em>the counterparty deleted this clause — accepting agrees to remove it</em>`
+      : esc(e.their_text);
+    const texts = e.ask_kind ? `
+      <details><summary>the texts — what accepting commits</summary>
+        <div class="xt"><b>OURS (standard):</b> ${esc(e.our_text)}</div>
+        <div class="xt"><b>THEIRS:</b> ${theirs}</div>
+      </details>` : "";
+    item.innerHTML = `
+      <div class="head">
+        <span class="c">${esc(e.clause_id)}</span>
+        <span class="m">${esc(e.matter)} · ${esc(e.counterparty)} · round ${e.round}</span>
+        <span class="chip stale">requires ${esc(e.requires)}</span>
+      </div>
+      ${texts}
+      <details><summary>the assistant's analysis</summary>${esc(e.analysis)}
+        ${e.proposed_text ? `<div class="xt"><b>assistant's counter-draft:</b> ${esc(e.proposed_text)}</div>` : ""}
+      </details>
+      <div class="actions">
+        ${e.ask_kind ? `<button class="btn small" data-d="accept-theirs">Accept theirs</button>` : ""}
+        <button class="btn small" data-d="hold">Hold our standard</button>
+      </div>`;
+    for (const btn of item.querySelectorAll("[data-d]")) {
+      btn.addEventListener("click", () => resolveEscalation(e, btn.dataset.d));
+    }
+    host.appendChild(item);
+  }
+}
+
+async function resolveEscalation(e, decision) {
+  const by = prompt(`Deciding as (name/email) — this requires ${e.requires}:`);
+  if (!by) return;
+  const why = prompt("Why? (journaled — this decision raises the clause's maturity)");
+  if (!why) return;
+  let res;
+  try {
+    res = await fetch(`/api/matters/${encodeURIComponent(e.matter)}/resolve`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clause_id: e.clause_id, decision, by, why }),
+    });
+  } catch {
+    banner("err", "Could not reach the server — nothing was recorded.");
+    return;
+  }
+  if (!res.ok) {
+    banner("err", await readError(res));
+    return;
+  }
+  banner("ok", `${e.clause_id}: ${decision === "hold" ? "standard held" : "deviation recorded"} — ` +
+    `journaled by ${by}; maturity raised`);
+  await loadHome();
+}
+
+$("btn-exceptions").addEventListener("click", async () => {
+  $("report-title").textContent = "Exception register — every agreed deviation from standard";
+  $("report-body").textContent = await (await fetch("/api/exceptions")).text();
+  $("report-dialog").showModal();
+});
+$("btn-drift").addEventListener("click", async () => {
+  $("report-title").textContent = "Cross-template drift";
+  $("report-body").textContent = await (await fetch("/api/drift")).text();
+  $("report-dialog").showModal();
+});
+
+/* ------------------------------------------------------ new-template wizard */
+const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+$("nb-doctype").addEventListener("input", () => {
+  if (!$("nb-name").dataset.touched) $("nb-name").value = slugify($("nb-doctype").value);
+  updateBuildButton();
+});
+$("nb-name").addEventListener("input", () => { $("nb-name").dataset.touched = "1"; updateBuildButton(); });
+
+$("drop").addEventListener("click", () => $("nb-files").click());
+$("drop").addEventListener("dragover", (e) => { e.preventDefault(); $("drop").classList.add("drag"); });
+$("drop").addEventListener("dragleave", () => $("drop").classList.remove("drag"));
+$("drop").addEventListener("drop", (e) => {
+  e.preventDefault();
+  $("drop").classList.remove("drag");
+  addFiles([...e.dataTransfer.files]);
+});
+$("nb-files").addEventListener("change", () => addFiles([...$("nb-files").files]));
+
+function addFiles(files) {
+  for (const f of files) {
+    if (!state.pickedFiles.some((p) => p.name === f.name)) state.pickedFiles.push(f);
+  }
+  renderFileRows();
+}
+
+function renderFileRows() {
+  const host = $("filerows");
+  // rebuilding the rows must never eat context notes already typed
+  const kept = new Map([...host.querySelectorAll(".filerow")].map((row) =>
+    [row.dataset.name, row.querySelector(".ctx").value]));
+  host.innerHTML = "";
+  state.pickedFiles.forEach((f, i) => {
+    const row = document.createElement("div");
+    row.className = "filerow";
+    row.dataset.name = f.name;
+    row.innerHTML = `
+      <div class="fname">${esc(f.name)}
+        <a style="cursor:pointer; color:var(--err-ink)" data-i="${i}" title="remove">×</a></div>
+      <input type="text" class="ctx" data-i="${i}"
+             placeholder="deal context — e.g. seller-friendly; W&I insurance">`;
+    row.querySelector(".ctx").value = kept.get(f.name) || "";
+    row.querySelector("a").addEventListener("click", () => {
+      state.pickedFiles.splice(i, 1);
+      renderFileRows();
+    });
+    host.appendChild(row);
+  });
+  $("ctx-hint").classList.toggle("hidden", !state.pickedFiles.length);
+  updateBuildButton();
+}
+
+function updateBuildButton() {
+  $("btn-build").disabled = !(state.pickedFiles.length >= 2 &&
+    $("nb-doctype").value.trim() && $("nb-name").value.trim());
+}
+
+$("btn-build").addEventListener("click", async () => {
+  const log = $("build-log");
+  log.style.display = "block";
+  log.textContent = "uploading…\n";
+  $("btn-build").disabled = true;
+  const form = new FormData();
+  form.append("doc_type", $("nb-doctype").value.trim());
+  form.append("name", $("nb-name").value.trim());
+  const contexts = [...document.querySelectorAll("#filerows .ctx")].map((el) => el.value.trim());
+  form.append("contexts", JSON.stringify(contexts));
+  for (const f of state.pickedFiles) form.append("files", f);
+  let job;
+  try {
+    const res = await fetch("/api/build", { method: "POST", body: form });
+    if (!res.ok) throw (await res.json()).detail || res.statusText;
+    job = await res.json();
+  } catch (e) {
+    log.textContent += `error: ${e}\n`;
+    $("btn-build").disabled = false;
+    return;
+  }
+  log.textContent = "build started — decompiling the corpus (this takes a few minutes)…\n";
+  let pollFailures = 0;
+  const poll = setInterval(async () => {
+    let status;
+    try {
+      status = await api(`/api/build/${job.id}`);
+      pollFailures = 0;
+    } catch (e) {
+      // one hiccup is fine; a run of them means the server restarted (jobs
+      // are in-memory) — stop spinning and say so instead of polling forever
+      if (++pollFailures < 5) return;
+      clearInterval(poll);
+      $("btn-build").disabled = false;
+      log.textContent += `\nLOST THE BUILD: ${e.detail || e} — if the server ` +
+        `restarted, the job is gone; check the workspace and rebuild if needed.\n`;
+      return;
+    }
+    log.textContent = "build started…\n" + status.log.map((l) => `  ${l}`).join("\n") + "\n";
+    log.scrollTop = log.scrollHeight;
+    if (status.state === "running") return;
+    clearInterval(poll);
+    $("btn-build").disabled = false;
+    if (status.state === "error") {
+      log.textContent += `\nBUILD FAILED: ${status.error}\n`;
+      return;
+    }
+    log.textContent += "\ndone — opening the new template. Read its build report first.\n";
+    state.pickedFiles = [];
+    renderFileRows();
+    await openTemplate(status.template);
+    showReport();  // the diagnosis is the first deliverable — show it
+  }, 1500);
+});
+
+/* -------------------------------------------------------------- template */
+async function openTemplate(name) {
+  state.name = name;
+  state.rendered = null;
+  $("page").innerHTML = `<div class="empty">Answer the questionnaire and press “Generate document”.</div>`;
+  await refreshTemplate();
+  show("template");
+}
+
+async function refreshTemplate() {
+  state.template = await api(t(""));
+  renderHeader();
+  renderQuestionnaire();
+  renderClauses();
+}
+
+function renderHeader() {
+  const tp = state.template;
+  $("title").textContent = tp.doc_type;
+  // count clause approvals only — the questionnaire's own approval entry is
+  // reported separately, not as a 13th clause of a 12-clause template
+  const counts = { approved: 0, stale: 0, unapproved: 0 };
+  for (const c of tp.clauses) counts[tp.status[c.id]]++;
+  const schema = tp.status[tp.schema_approval_id];
+  let summary = `${tp.clauses.length} clauses · ${counts.approved} approved`;
+  if (counts.stale) summary += ` · ${counts.stale} stale`;
+  if (counts.unapproved) summary += ` · ${counts.unapproved} unapproved`;
+  if (schema !== "approved") summary += ` · questionnaire ${schema}`;
+  if (tp.certificate_current === false && !counts.stale && !counts.unapproved) {
+    summary += " · structure changed since sign-off";
+  }
+  $("status-summary").textContent = summary;
+  $("btn-report").style.display = tp.has_report ? "" : "none";
+  $("btn-playbook").style.display = tp.has_skill ? "" : "none";
+}
+
+async function showTextDialog(path, title) {
+  const res = await fetch(t(path));
+  if (!res.ok) return;
+  $("report-title").textContent = title;
+  $("report-body").textContent = await res.text();
+  $("report-dialog").showModal();
+}
+const showReport = () => showTextDialog("/report", "Build report");
+$("btn-report").addEventListener("click", showReport);
+$("btn-playbook").addEventListener("click", () =>
+  showTextDialog("/skill", "Learned playbook — review like any other document"));
+
+const answersKey = () => `tb-answers::${state.name}`;
+const loadAnswers = () => JSON.parse(localStorage.getItem(answersKey()) || "{}");
+const saveAnswers = (a) => localStorage.setItem(answersKey(), JSON.stringify(a));
+
+function renderQuestionnaire() {
+  const form = $("questionnaire");
+  const saved = loadAnswers();
+  form.innerHTML = "";
+  for (const v of state.template.variables) {
+    const name = esc(v.name);  // LLM-derived: escaped like everything else
+    const wrap = document.createElement("div");
+    if (v.type === "boolean") {
+      wrap.className = "q bool";
+      wrap.innerHTML = `
+        <input type="checkbox" id="q-${name}" ${saved[v.name] ? "checked" : ""}>
+        <label class="q-label" for="q-${name}">${esc(v.question)}
+          <span class="name">${name}</span></label>`;
+    } else {
+      wrap.className = "q";
+      let input;
+      if (v.type === "choice") {
+        input = `<select id="q-${name}">
+          <option value="">—</option>
+          ${v.choices.map((c) => `<option ${saved[v.name] === c ? "selected" : ""}>${esc(c)}</option>`).join("")}
+        </select>`;
+      } else {
+        const val = saved[v.name] !== undefined && saved[v.name] !== null ? esc(String(saved[v.name])) : "";
+        input = `<input type="${v.type === "number" ? "number" : "text"}" id="q-${name}" value="${val}" step="any">`;
+      }
+      wrap.innerHTML = `<label class="q-label" for="q-${name}">${esc(v.question)}
+        <span class="name">${name} · ${v.type}</span></label>${input}`;
+    }
+    form.appendChild(wrap);
+  }
+}
+// registered ONCE: the form element persists, so registering inside
+// renderQuestionnaire would stack a duplicate listener per re-render
+$("questionnaire").addEventListener("change", () => saveAnswers(collectAnswers().answers));
+
+function collectAnswers() {
+  const answers = {}, missing = [];
+  for (const v of state.template.variables) {
+    const el = $(`q-${v.name}`);
+    if (v.type === "boolean") answers[v.name] = el.checked;
+    else if (el.value === "") missing.push(v.name);
+    else answers[v.name] = v.type === "number" ? Number(el.value) : el.value;
+  }
+  return { answers, missing };
+}
+
+function renderClauses() {
+  const tp = state.template;
+  const host = $("clauses");
+  host.innerHTML = "";
+  for (const c of tp.clauses) {
+    const card = document.createElement("div");
+    card.className = "clause";
+    // semantic dependency edges touching this clause, with their audit notes
+    const edges = [];
+    for (const d of tp.dependencies || []) {
+      if (d.from_clause === c.id) {
+        edges.push(`<div class="dep"><b>${esc(d.kind)}</b> <span class="did">${esc(d.to_clause)}</span> — ${esc(d.note)}</div>`);
+      } else if (d.to_clause === c.id) {
+        const phrase = d.kind === "trade-off" ? "trade-off with this" : `${d.kind} this`;
+        edges.push(`<div class="dep"><span class="did">${esc(d.from_clause)}</span> <b>${esc(phrase)}</b> — ${esc(d.note)}</div>`);
+      }
+    }
+    card.innerHTML = `
+      <div class="head">
+        <span class="cid">${esc(c.id)}</span>
+        <span class="heading">${esc(c.heading)}</span>
+        ${c.include_when ? `<span class="chip cond">when ${esc(c.include_when)}</span>` : ""}
+        <span class="chip ${tp.status[c.id]}">${tp.status[c.id]}</span>
+      </div>
+      ${edges.length ? `<div class="deps">${edges.join("")}</div>` : ""}
+      ${c.variants.map((v) => `
+        <div class="variant" data-clause="${esc(c.id)}" data-variant="${esc(v.id)}">
+          <div class="vhead">
+            <span class="vid">${esc(v.id)}</span>
+            ${v.when ? `<span class="chip cond">when ${esc(v.when)}</span>` : `<span class="chip cond">default</span>`}
+            <button class="btn small" data-action="edit" style="margin-left:auto">Edit</button>
+          </div>
+          <div class="vtext">${highlight(v.text)}</div>
+          ${v.provenance.length ? `<div class="provenance">from ${esc(v.provenance.join(", "))}</div>` : ""}
+        </div>`).join("")}
+    `;
+    host.appendChild(card);
+  }
+  host.querySelectorAll("button[data-action=edit]").forEach((btn) =>
+    btn.addEventListener("click", () => beginEdit(btn.closest(".variant"))));
+}
+
+function beginEdit(variantEl) {
+  const clauseId = variantEl.dataset.clause, variantId = variantEl.dataset.variant;
+  const clause = state.template.clauses.find((c) => c.id === clauseId);
+  const variant = clause.variants.find((v) => v.id === variantId);
+  const textEl = variantEl.querySelector(".vtext");
+  if (variantEl.querySelector("textarea")) return;
+  textEl.style.display = "none";
+  const ta = document.createElement("textarea");
+  ta.value = variant.text;
+  const why = document.createElement("input");
+  why.type = "text";
+  why.placeholder = "why? (journaled — `tb skill` learns from this)";
+  why.style.marginTop = "6px";
+  const bar = document.createElement("div");
+  bar.className = "editbar";
+  bar.innerHTML = `<button class="btn small primary">Save</button><button class="btn small">Cancel</button>`;
+  textEl.after(ta, why, bar);
+  const [save, cancel] = bar.querySelectorAll("button");
+  cancel.addEventListener("click", () => { ta.remove(); why.remove(); bar.remove(); textEl.style.display = ""; });
+  save.addEventListener("click", async () => {
+    try {
+      const out = await api(t("/edit/replace-text"),
+        { clause_id: clauseId, variant_id: variantId, text: ta.value,
+          why: why.value.trim() || null });
+      if (!out.saved) {
+        banner("err", "Edit refused — it would introduce validation errors:", out.new_errors);
+        return;
+      }
+      const reasons = out.messages.filter((m) => m.startsWith("review "));
+      banner("ok", out.review.length
+        ? `Saved. Blast radius — review these clauses too: ${out.review.join(", ")}`
+        : `Saved. Approval for ${clauseId} is now stale until re-approved.`,
+        reasons);
+      if (state.rendered) {
+        // a generated document must never silently keep pre-edit text
+        state.rendered = null;
+        $("page").innerHTML = `<div class="empty">The template changed since this ` +
+          `document was generated — press “Generate document” again.</div>`;
+        $("doc-status").textContent = "";
+        $("deviations").className = "notice warn hidden";
+        $("doc-unapproved").className = "notice warn hidden";
+      }
+      await refreshTemplate();
+    } catch (e) { banner("err", String(e.detail || e)); }
+  });
+}
+
+/* ----------------------------------------------------- validate / approve */
+$("btn-validate").addEventListener("click", async () => {
+  const out = await api(t("/validate"), {});
+  const msgs = out.findings.map((f) => `[${f.level}] ${f.where}: ${f.message}`);
+  const cov = `${out.coverage.configurations_tested} of ${out.coverage.configurations_total} ` +
+    `configurations rendered (${out.coverage.exhaustive ? "exhaustive" : "sampled"})`;
+  banner(out.error_count ? "err" : "ok",
+    `${out.error_count} error(s), ${out.findings.length - out.error_count} warning(s) — sweep: ${cov}`,
+    msgs);
+});
+
+$("btn-approve").addEventListener("click", async () => {
+  const by = prompt("Approve every clause at its current content hash.\nApprover name/email:");
+  if (!by) return;
+  try {
+    const out = await api(t("/approve"), { by });
+    banner("ok", `Approved ${out.approved.length} item(s). Coverage: ` +
+      `${out.certificate.configurations_tested}/${out.certificate.configurations_total} ` +
+      `configurations (${out.certificate.exhaustive ? "exhaustive" : "sampled"}).`);
+    await refreshTemplate();
+  } catch (e) {
+    banner("err", "Refused — fix validation errors first:", Array.isArray(e.detail) ? e.detail : [e.detail]);
+  }
+});
+
+/* ------------------------------------------------------------------ intake */
+$("btn-intake").addEventListener("click", async () => {
+  const text = $("intake-text").value.trim();
+  if (!text) return;
+  banner("ok", "Extracting answers from the term sheet…");
+  try {
+    const out = await api(t("/intake"), { term_sheet: text });
+    const nulls = [];
+    for (const [name, value] of Object.entries(out.answers)) {
+      const el = $(`q-${name}`);
+      if (!el) continue;
+      if (value === null) { nulls.push(name); continue; }
+      if (typeof value === "boolean") el.checked = value; else el.value = value;
+    }
+    saveAnswers(collectAnswers().answers);
+    banner(nulls.length ? "warn" : "ok",
+      nulls.length ? `Filled ${Object.keys(out.answers).length - nulls.length} answers; ` +
+        `not found in the term sheet: ${nulls.join(", ")}` : "All answers found in the term sheet.");
+  } catch (e) { banner("err", String(e.detail || e)); }
+});
+
+/* ------------------------------------------------------- document editor */
+async function generateDocument() {
+  const { answers, missing } = collectAnswers();
+  if (missing.length) {
+    banner("err", "Answer the remaining questions first:", missing);
+    show("template");
+    return;
+  }
+  try {
+    state.rendered = await api(t("/render"), { answers });
+  } catch (e) {
+    banner("err", "Cannot render:", Array.isArray(e.detail) ? e.detail : [e.detail]);
+    show("template");
+    return;
+  }
+  banner(null);
+  const page = $("page");
+  page.innerHTML = `<h1 class="doctitle">${esc(state.rendered.title)}</h1>`;
+  for (const c of state.rendered.clauses) {
+    const sec = document.createElement("section");
+    sec.className = "doc-clause";
+    sec.dataset.id = c.id;
+    sec.dataset.number = c.number;
+    sec.dataset.heading = c.heading;
+    sec.innerHTML = `
+      <div class="dhead">
+        <h3>${c.number}. ${esc(c.heading)}</h3>
+        <div class="tools">
+          <span class="chip edited hidden">hand-edited</span>
+          <button class="btn small" data-action="reset">Reset</button>
+        </div>
+      </div>
+      <div class="dbody" contenteditable="true" spellcheck="false">
+        ${c.text.split("\n\n").map((p) => `<p>${esc(p)}</p>`).join("")}
+      </div>`;
+    sec.querySelector(".dbody").addEventListener("input", () => markDeviation(sec));
+    sec.querySelector("[data-action=reset]").addEventListener("click", () => {
+      const original = state.baseline.get(c.id);
+      sec.querySelector(".dbody").innerHTML =
+        original.split("\n\n").map((p) => `<p>${esc(p)}</p>`).join("");
+      markDeviation(sec);
+    });
+    page.appendChild(sec);
+  }
+  // Baselines come from the DOM itself, read the same way markDeviation
+  // reads it — comparing DOM text against raw clause text falsely flagged
+  // clauses whose text contains single newlines the browser renders as
+  // spaces, permanently and immune to Reset.
+  state.baseline = new Map([...page.querySelectorAll(".doc-clause")]
+    .map((sec) => [sec.dataset.id, sectionText(sec)]));
+  const un = $("doc-unapproved");
+  if (state.rendered.unapproved.length) {
+    un.className = "notice warn";
+    un.textContent = "Included content lacking current sign-off: " +
+      state.rendered.unapproved.join(", ") + " — approve the template before sending this out.";
+  } else { un.className = "notice warn hidden"; }
+  $("doc-status").textContent =
+    `${state.rendered.clauses.length} clauses · deterministic render · click any clause text to edit`;
+  updateDeviations();
+  show("document");
+}
+
+const sectionText = (sec) =>
+  sec.querySelector(".dbody").innerText.split(/\n+/).map((s) => s.trim()).filter(Boolean).join("\n\n");
+
+// The deterministic render is always plain text, so ANY formatting is a
+// manual change — flagged like any other hand edit.
+const hasFormatting = (sec) =>
+  !!sec.querySelector(".dbody").querySelector("b,strong,i,em,u,ul,ol,li");
+
+function markDeviation(sec) {
+  const changed = sectionText(sec) !== state.baseline.get(sec.dataset.id)
+    || hasFormatting(sec);
+  sec.classList.toggle("edited", changed);
+  sec.querySelector(".chip.edited").classList.toggle("hidden", !changed);
+  updateDeviations();
+}
+
+// Formatting toolbar: mousedown (not click) so the editor keeps its selection.
+document.querySelectorAll("#fmtbar button").forEach((btn) => {
+  btn.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+    document.execCommand(btn.dataset.cmd);
+    const sec = document.getSelection()?.anchorNode?.parentElement?.closest(".doc-clause");
+    if (sec) markDeviation(sec);
+  });
+});
+
+function updateDeviations() {
+  const edited = [...document.querySelectorAll(".doc-clause.edited")]
+    .map((sec) => `${sec.dataset.number}. ${sec.dataset.heading}`);
+  const el = $("deviations");
+  if (edited.length) {
+    el.className = "notice warn";
+    el.textContent = `Hand-edited, outside the template's approval — route to review: ${edited.join(" · ")}`;
+  } else { el.className = "notice warn hidden"; }
+}
+
+$("btn-render").addEventListener("click", generateDocument);
+$("btn-regenerate").addEventListener("click", generateDocument);
+
+$("btn-download").addEventListener("click", async () => {
+  if (!state.rendered) { banner("err", "Generate the document first."); return; }
+  const clauses = [...document.querySelectorAll(".doc-clause")].map((sec) => ({
+    id: sec.dataset.id,
+    number: Number(sec.dataset.number),
+    heading: sec.dataset.heading,
+    text: sectionText(sec),
+    html: sec.querySelector(".dbody").innerHTML,  // server whitelists b/i/u/lists
+  }));
+  let res;
+  try {
+    res = await fetch("/api/export-docx", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: state.rendered.title, clauses }),
+    });
+  } catch {
+    banner("err", "Could not reach the server — nothing was downloaded.");
+    return;
+  }
+  if (!res.ok) {
+    // an error body saved as .docx would be a corrupt file on disk
+    banner("err", `Export failed: ${await readError(res)}`);
+    return;
+  }
+  const blob = await res.blob();
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = (res.headers.get("Content-Disposition") || "").match(/filename="(.+)"/)?.[1] || "contract.docx";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+(async () => {
+  try {
+    const config = await api("/api/config");
+    if (config.read_only) {
+      const el = $("demo-banner");
+      el.className = "notice warn";
+      el.innerHTML = `Read-only public demo — browse the templates, matters and ` +
+        `registers; generate and download documents. Edits and LLM features are ` +
+        `disabled here: <a href="https://github.com/jtstoneman/template-builder" ` +
+        `target="_blank" rel="noopener">clone the repo</a> and run ` +
+        `<code>tb serve</code> locally with your own API key for the full product.`;
+    }
+  } catch { /* older server without /api/config: not a demo */ }
+})();
+loadHome().catch((e) => banner("err", String(e.detail || e)));
+</script>
+</body>
+</html>
