@@ -250,3 +250,34 @@ def test_cli_edit_unknown_clause_id_is_an_error_not_a_traceback(tpl_path, tmp_pa
     # same contract for the other node-addressing edit commands
     assert main(["edit", "remove-clause", str(tpl_path), "ghost"]) == 1
     assert "no clause with id 'ghost'" in capsys.readouterr().err
+
+
+def test_remove_variable_unused_succeeds(template):
+    edit.add_variable(template, "orphan_toggle", "boolean", "Ever used?")
+    result = edit.remove_variable(template, "orphan_toggle")
+    assert "removed variable 'orphan_toggle'" in result.messages[0]
+    assert not any(v.name == "orphan_toggle" for v in template.variables)
+
+
+def test_remove_variable_refuses_when_used_in_text(template):
+    # every conftest template variant references party_1 in its text
+    used = next(v.name for v in template.variables
+                if any(f"{{{{{v.name}}}}}" in var.text
+                       for c in template.clauses for var in c.variants))
+    with pytest.raises(edit.EditError, match="still used by"):
+        edit.remove_variable(template, used)
+
+
+def test_remove_variable_refuses_when_used_in_condition(template):
+    clause = template.clauses[0]
+    edit.add_variable(template, "gate_me", "boolean", "Gate?")
+    edit.set_condition(template, clause.id, "gate_me")
+    with pytest.raises(edit.EditError, match=clause.id):
+        edit.remove_variable(template, "gate_me")
+    edit.set_condition(template, clause.id, None)
+    edit.remove_variable(template, "gate_me")  # now unused -> allowed
+
+
+def test_remove_variable_unknown_name_is_key_error(template):
+    with pytest.raises(KeyError):
+        edit.remove_variable(template, "never_existed")

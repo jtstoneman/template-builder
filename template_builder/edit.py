@@ -219,6 +219,44 @@ def add_variable(template, name, vtype, question, choices=None) -> EditResult:
                                 f"needs (re-)approval"])
 
 
+def variable_users(template: Template, name: str) -> list[str]:
+    """Clause ids whose text or conditions use the variable."""
+    from .render import PLACEHOLDER_RE, placeholder_parts
+
+    users: list[str] = []
+    for clause in template.clauses:
+        used: set[str] = set()
+        for expr in [clause.include_when] + [v.when for v in clause.variants]:
+            if expr is not None:
+                try:
+                    used |= conditions.variables_in(expr)
+                except conditions.ConditionError:
+                    pass  # validation reports bad conditions; not our job here
+        for variant in clause.variants:
+            for match in PLACEHOLDER_RE.finditer(variant.text):
+                is_ref, n = placeholder_parts(match)
+                if not is_ref:
+                    used.add(n)
+        if name in used:
+            users.append(clause.id)
+    return users
+
+
+def remove_variable(template, name) -> EditResult:
+    """Remove a questionnaire variable nothing uses any more (e.g. after an
+    edit made the clause that needed it unconditional)."""
+    var = next((v for v in template.variables if v.name == name), None)
+    if var is None:
+        raise KeyError(f"no variable named {name!r}")
+    users = variable_users(template, name)
+    if users:
+        raise EditError(f"variable {name!r} is still used by: {', '.join(users)} — "
+                        f"edit those clauses first")
+    template.variables.remove(var)
+    return EditResult(messages=[f"removed variable {name!r} — the questionnaire changed "
+                                f"and needs (re-)approval"])
+
+
 def add_dependency(template, from_clause, to_clause, kind, note) -> EditResult:
     template.clause(from_clause)  # raise KeyError early on unknown endpoints
     template.clause(to_clause)

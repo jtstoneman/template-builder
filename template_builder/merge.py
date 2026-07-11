@@ -24,6 +24,8 @@ the deterministic layer disposes.
 import os
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from difflib import SequenceMatcher
 
 from pydantic import BaseModel
 
@@ -104,6 +106,59 @@ def build_outline(atomised: dict[str, list[SourceClause]],
     return complete(OUTLINE_SYSTEM, prompt, Outline)
 
 
+# ------------------------------------------------------ divergence scan ---
+
+@dataclass
+class Divergence:
+    """The two most dissimilar source versions of one canonical clause.
+
+    Computed deterministically (no LLM) so the questionnaire planner can SEE
+    where the corpus disagrees with itself — that disagreement is exactly
+    where negotiation-posture variables and clause variants should come from.
+    """
+    clause_id: str
+    similarity: float          # 0..1 SequenceMatcher ratio of the worst pair
+    file_a: str
+    text_a: str
+    file_b: str
+    text_b: str
+
+
+def divergent_versions(outline: "Outline",
+                       atomised: dict[str, list[SourceClause]],
+                       *, threshold: float = 0.75,
+                       max_clauses: int = 12) -> list[Divergence]:
+    """Clauses whose source versions genuinely disagree, most divergent first.
+
+    For each canonical clause with at least two matched source versions, find
+    the most dissimilar pair; keep it when its similarity falls below the
+    threshold (differences in names/dates alone score far above it).
+    """
+    found: list[Divergence] = []
+    for entry in outline.clauses:
+        versions: list[tuple[str, str]] = []
+        for match in entry.matches:
+            source_clauses = atomised.get(match.file, [])
+            for index in match.indices:
+                if 0 <= index < len(source_clauses):
+                    text = " ".join(source_clauses[index].text.split())
+                    if text:
+                        versions.append((match.file, text[:800]))
+        worst: tuple[float, tuple[str, str], tuple[str, str]] | None = None
+        for i in range(len(versions)):
+            for j in range(i + 1, len(versions)):
+                ratio = SequenceMatcher(None, versions[i][1], versions[j][1]).ratio()
+                if worst is None or ratio < worst[0]:
+                    worst = (ratio, versions[i], versions[j])
+        if worst is not None and worst[0] < threshold:
+            (ratio, (file_a, text_a), (file_b, text_b)) = worst
+            found.append(Divergence(clause_id=entry.id, similarity=ratio,
+                                    file_a=file_a, text_a=text_a,
+                                    file_b=file_b, text_b=text_b))
+    found.sort(key=lambda d: d.similarity)
+    return found[:max_clauses]
+
+
 # ------------------------------------------------------------- synthesis ---
 
 class VariablePlan(BaseModel):
@@ -116,8 +171,9 @@ You design the questionnaire for a contract template that is about to be
 assembled from many precedent contracts of the same type.
 
 You receive the canonical clause outline (with how many source contracts each
-clause appears in), the preamble of every source contract, and optional
-"deal context" notes describing the deal each source came from.
+clause appears in), excerpts showing where the sources DISAGREE on the same
+clause, the preamble of every source contract, and optional "deal context"
+notes describing the deal each source came from.
 
 Propose the complete variable schema:
 1. DEAL FACTS every rendering needs: party names and descriptions, dates,
@@ -126,14 +182,29 @@ Propose the complete variable schema:
    template. Prefer symmetric names (party_a_name / party_b_name).
 2. STRUCTURAL TOGGLES: for each outline clause that appears in only some
    sources and is plausibly optional, a boolean named include_<something>.
-3. CONTEXT DIMENSIONS: where the deal contexts differ along a dimension that
+3. NEGOTIATION POSTURES: the disagreement excerpts show the same clause
+   drafted from materially different positions — stricter vs lighter
+   obligations, broader vs narrower carve-outs, one-sided vs balanced
+   remedies, longer vs shorter tails. Plan a choice variable for each such
+   axis so synthesis can keep every position as a selectable variant instead
+   of discarding all but one. STRONGLY PREFER one deal-level axis shared
+   across clauses (e.g. drafting_posture with choices like
+   "discloser-favourable" / "balanced" / "recipient-favourable" — name it
+   for THIS document type) when it plausibly explains several clauses'
+   divergence; add a clause-specific choice variable only for an axis the
+   shared one cannot express. Every choice must be self-explanatory to a
+   deal lawyer answering the questionnaire, and its "question" should say
+   what turns on it. Ignore disagreements that are only names, dates,
+   amounts or style — those are deal facts, not postures.
+4. CONTEXT DIMENSIONS: where the deal contexts differ along a dimension that
    plausibly changed the drafting (seller-friendly vs buyer-friendly, W&I
    insurance, cross-border), a boolean or choice variable capturing it.
-4. Keep the schema MINIMAL: one shared variable beats near-duplicates; do
+5. Keep the schema MINIMAL: one shared variable beats near-duplicates; do
    not propose a variable no clause would plausibly use.
 
-"notes": reasoning a reviewing lawyer should see — especially which context
-dimension you inferred from which sources.
+"notes": reasoning a reviewing lawyer should see — especially which posture
+axis you read out of which disagreement, and which context dimension you
+inferred from which sources.
 """
 
 
@@ -152,6 +223,16 @@ def variable_plan_prompt(doc_type: str, outline: "Outline",
         parts.append("Deal contexts:")
         for name, context in sorted(contexts.items()):
             parts.append(f"- {name}: {context}")
+    divergences = divergent_versions(outline, atomised)
+    if divergences:
+        parts.append("")
+        parts.append("Where the sources DISAGREE on the same clause — the two most "
+                     "dissimilar versions, most divergent first. Deal facts aside, "
+                     "each is a candidate negotiation-posture axis (rule 3):")
+        for d in divergences:
+            parts.append(f"--- {d.clause_id} (similarity {d.similarity:.2f}) ---")
+            parts.append(f"[{d.file_a}] {d.text_a[:300]}")
+            parts.append(f"[{d.file_b}] {d.text_b[:300]}")
     parts.append("")
     parts.append("Source preambles (parties, dates, purpose usually live here):")
     for name, clauses in sorted(atomised.items()):
@@ -214,12 +295,21 @@ Rules:
    names, dates, amounts, durations or similar literals, produce ONE variant
    and replace the literal with a {{snake_case}} variable. Reuse the
    existing variables you are given whenever one fits; only add to
-   "new_variables" when nothing existing fits.
-2. VARIANTS are for substantively different drafting approaches (e.g. mutual
-   vs one-way obligations). Gate each with a "when" condition on a boolean
-   or choice variable. Exactly one variant must be the default:
-   "when": null, listed LAST. If the sources agree, produce a single default
-   variant.
+   "new_variables" when nothing existing fits. A variable must never paper
+   over a difference in obligation, scope, strictness or remedy — that is a
+   difference of POSITION, and positions get variants (rule 2).
+2. PRESERVE COMPETING POSITIONS AS VARIANTS: when the sources take
+   materially different positions on this clause — mutual vs one-way,
+   stricter vs lighter obligations, broader vs narrower carve-outs,
+   one-sided vs balanced remedies, longer vs shorter tails — keep EACH
+   position as its own variant. Gate each with a "when" condition on the
+   questionnaire variable that captures the axis: reuse a planned posture or
+   choice variable whenever one fits, and only invent a new one when none
+   does. Do not average competing positions into one text, and do not
+   silently drop a position a source actually takes — a lawyer must be able
+   to select it from the questionnaire. Exactly one variant must be the
+   default: "when": null, listed LAST. If the sources genuinely agree,
+   produce a single default variant.
 3. CONDITIONS use a tiny language: bare boolean names (is_mutual),
    comparisons (governing_law == "New York", term_years >= 3), and/or/not.
    Nothing else.
@@ -232,8 +322,10 @@ Rules:
    variable named include_<something>.
 6. No square-bracket placeholders may remain in the text; every {{variable}}
    you use must exist in the given variables or in "new_variables".
-7. Choose the best drafting among the sources as the base — clear, complete,
-   protective of both parties — rather than the most common one.
+7. WITHIN each position, choose the best drafting among the sources that
+   share it — clear, complete, protective — rather than the most common one.
+   Never use this rule to choose BETWEEN competing positions; that choice
+   belongs to the questionnaire (rule 2).
 8. "provenance": which source files each variant's language is based on.
 9. "notes": conflicts between sources, judgement calls you made, and any
    drafting problems (a reviewing lawyer reads these).

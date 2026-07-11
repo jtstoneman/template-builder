@@ -240,3 +240,59 @@ def test_atomise_llm_mode_never_touches_isaacus(monkeypatch):
                             SourceClause(heading="H", text="T", defines=[])], notes=[]))
     result = decompile.atomise("text", "a.txt")
     assert result.clauses[0].heading == "H"
+
+
+# --- divergence scan: where the corpus disagrees with itself ------------------
+
+def _divergence_fixture():
+    atomised = {
+        "a.txt": [
+            SourceClause(heading="Term", defines=[],
+                         text="This Agreement lasts three (3) years from the Effective Date."),
+            SourceClause(heading="Remedies", defines=[],
+                         text="The Disclosing Party is entitled to injunctive relief, "
+                              "specific performance and recovery of all legal costs on "
+                              "an indemnity basis, without proof of actual damage."),
+        ],
+        "b.txt": [
+            SourceClause(heading="Term", defines=[],
+                         text="This Agreement lasts five (5) years from the Effective Date."),
+            SourceClause(heading="Remedies", defines=[],
+                         text="Nothing in this Agreement limits the remedies available "
+                              "to either party at law; each party bears its own costs."),
+        ],
+    }
+    outline = Outline(clauses=[
+        OutlineEntry(id="term", heading="Term", matches=[
+            OutlineMatch(file="a.txt", indices=[0]),
+            OutlineMatch(file="b.txt", indices=[0])]),
+        OutlineEntry(id="remedies", heading="Remedies", matches=[
+            OutlineMatch(file="a.txt", indices=[1]),
+            OutlineMatch(file="b.txt", indices=[1])]),
+    ], notes=[])
+    return outline, atomised
+
+
+def test_divergent_versions_flags_positions_not_literals():
+    outline, atomised = _divergence_fixture()
+    found = merge.divergent_versions(outline, atomised)
+    # "three (3) years" vs "five (5) years" is a deal fact, not a divergence
+    assert [d.clause_id for d in found] == ["remedies"]
+    assert found[0].similarity < 0.75
+    assert {found[0].file_a, found[0].file_b} == {"a.txt", "b.txt"}
+
+
+def test_divergent_versions_needs_two_versions():
+    outline, atomised = _divergence_fixture()
+    atomised["b.txt"] = []  # every clause now has a single version
+    assert merge.divergent_versions(outline, atomised) == []
+
+
+def test_variable_plan_prompt_surfaces_disagreements():
+    outline, atomised = _divergence_fixture()
+    prompt = variable_plan_prompt("NDA", outline, atomised, {})
+    assert "DISAGREE" in prompt
+    assert "--- remedies (similarity" in prompt
+    assert "injunctive relief" in prompt        # excerpt from a.txt's position
+    assert "bears its own costs" in prompt      # excerpt from b.txt's position
+    assert "--- term (similarity" not in prompt

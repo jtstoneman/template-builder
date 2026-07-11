@@ -272,6 +272,11 @@ def build_parser() -> argparse.ArgumentParser:
     ep.add_argument("--choices", help="comma-separated (choice type only)")
     ep.set_defaults(func=cmd_edit_add_variable)
 
+    ep = edit_parser("remove-variable",
+                     "remove a questionnaire variable nothing uses any more")
+    ep.add_argument("name")
+    ep.set_defaults(func=cmd_edit_remove_variable)
+
     return parser
 
 
@@ -819,6 +824,10 @@ def cmd_edit_add_variable(args):
         choices = [c.strip() for c in args.choices.split(",") if c.strip()]
     return _apply_edit(args, lambda t: edit_mod.add_variable(t, args.name, args.type,
                                                              args.question, choices))
+
+
+def cmd_edit_remove_variable(args):
+    return _apply_edit(args, lambda t: edit_mod.remove_variable(t, args.name))
 
 
 if __name__ == "__main__":
