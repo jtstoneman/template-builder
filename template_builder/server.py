@@ -16,14 +16,17 @@ refuses silently-wrong output, hash-based approval status.
 
 import io
 import json
+import secrets
 import sys
 import threading
 import uuid
+from base64 import b64decode
+from datetime import date
 from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse, PlainTextResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Response
 from pydantic import BaseModel, Field
 
 from . import approve as approve_mod
@@ -42,6 +45,30 @@ type AnswerValue = str | int | float | bool
 
 STATIC_DIR = Path(__file__).parent / "static"
 MAX_UPLOAD_BYTES = 20 * 1024 * 1024  # per uploaded document
+MAX_ANSWER_CHARS = 4_000             # per string answer on the public intake form
+MAX_PENDING_INTAKE = 200             # unauthenticated submissions queue at most this
+JOB_HISTORY = 50                     # finished build jobs kept for late pollers
+
+# Every page is a single file with inline style/script (no build step), so the
+# CSP must allow 'unsafe-inline' — what it still buys us: no external scripts,
+# no cross-origin fetches (connect-src), no framing, no form exfiltration.
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
+    "Content-Security-Policy": (
+        "default-src 'self'; img-src 'self' data:; style-src 'unsafe-inline'; "
+        "script-src 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; "
+        "form-action 'self'; base-uri 'none'"),
+}
+
+
+def _version() -> str:
+    try:
+        from importlib.metadata import version
+        return version("template-builder")
+    except Exception:
+        return "unknown"
 
 
 # ------------------------------------------------------------ wire models ---
@@ -229,6 +256,15 @@ class IntakeSchemaOut(BaseModel):
     variables: list[VariableOut]
 
 
+class IntakeSubmitIn(BaseModel):
+    counterparty: str = Field(min_length=1, max_length=200)
+    answers: dict[str, AnswerValue]
+
+
+class IntakeSubmitOut(BaseModel):
+    id: str
+
+
 class BuildJobOut(BaseModel):
     id: str
     state: str  # "running" | "done" | "error"
@@ -252,7 +288,8 @@ class _BuildJob:
 
 # ------------------------------------------------------------------- app ---
 
-def create_app(workspace: str, *, read_only: bool = False) -> FastAPI:
+def create_app(workspace: str, *, read_only: bool = False,
+               auth: str | None = None) -> FastAPI:
     """Serve a workspace directory of template .json files.
 
     For convenience (and backward compatibility) `workspace` may also be a
@@ -262,6 +299,13 @@ def create_app(workspace: str, *, read_only: bool = False) -> FastAPI:
     rendering and .docx export work, but nothing writes to the workspace and
     nothing calls an LLM — so the instance needs no API key and no visitor
     can change (or run up a bill on) the shared demo data.
+
+    With auth="user:password" every request needs HTTP Basic credentials,
+    except the counterparty-facing intake surface (the /intake/ page, its
+    questionnaire, its submit endpoint) and the /api/config health check.
+    Basic auth is browser-native, so the frontend needs no login code — but
+    it sends credentials with every request, so an authenticated deployment
+    MUST sit behind TLS (a reverse proxy such as Caddy or nginx).
     """
     ws = Path(workspace)
     if ws.is_file():
@@ -269,12 +313,12 @@ def create_app(workspace: str, *, read_only: bool = False) -> FastAPI:
         ws = ws.parent
     if not ws.is_dir():
         raise NotADirectoryError(f"{workspace} is not a directory or template file")
+    if auth is not None and ":" not in auth:
+        raise ValueError("auth must be 'user:password' — set TB_AUTH accordingly")
 
     app = FastAPI(title="template-builder", docs_url=None, redoc_url=None)
 
     if read_only:
-        from fastapi.responses import JSONResponse
-
         # Pure-compute POSTs are safe: they read the workspace, write nothing.
         def _compute_only(path: str) -> bool:
             return (path == "/api/export-docx"
@@ -290,9 +334,48 @@ def create_app(workspace: str, *, read_only: bool = False) -> FastAPI:
                     "locally with your own API key for the full product."})
             return await call_next(request)
 
+    if auth:
+        expected = auth.encode()
+
+        def _counterparty_facing(path: str) -> bool:
+            # The ONLY surface the other side of the table needs: the intake
+            # page, its questionnaire, its submit endpoint — plus the health
+            # check. Everything else is the firm's and requires credentials.
+            return (path == "/api/config"
+                    or path.startswith("/intake/")
+                    or path.startswith("/api/intake/"))
+
+        @app.middleware("http")
+        async def basic_auth_guard(request, call_next):
+            if _counterparty_facing(request.url.path):
+                return await call_next(request)
+            header = request.headers.get("authorization", "")
+            supplied = b""
+            if header.startswith("Basic "):
+                try:
+                    supplied = b64decode(header[6:], validate=True)
+                except ValueError:
+                    pass
+            # compare_digest even on garbage: same code path, same timing
+            if not secrets.compare_digest(supplied, expected):
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "authentication required"},
+                    headers={"WWW-Authenticate":
+                             'Basic realm="template-builder", charset="UTF-8"'})
+            return await call_next(request)
+
+    # Registered last = outermost: the headers land on every response,
+    # including the 401/403 refusals from the guards above.
+    @app.middleware("http")
+    async def security_headers(request, call_next):
+        response = await call_next(request)
+        response.headers.update(SECURITY_HEADERS)
+        return response
+
     @app.get("/api/config")
     def config() -> dict:
-        return {"read_only": read_only}
+        return {"read_only": read_only, "version": _version()}
     jobs: dict[str, _BuildJob] = {}
     building: set[str] = set()          # template names with an in-flight build
     building_lock = threading.Lock()
@@ -408,6 +491,12 @@ def create_app(workspace: str, *, read_only: bool = False) -> FastAPI:
 
         job = _BuildJob()
         jobs[job.id] = job
+        # bounded history: evict the oldest finished jobs, never a running one
+        while len(jobs) > JOB_HISTORY:
+            oldest = next((k for k, j in jobs.items() if j.state != "running"), None)
+            if oldest is None:
+                break
+            del jobs[oldest]
 
         def run():
             # Same semantics as `tb build`: learned playbook in, build journaled.
@@ -682,6 +771,39 @@ def create_app(workspace: str, *, read_only: bool = False) -> FastAPI:
             doc_type=template.doc_type,
             variables=[VariableOut(**v.model_dump()) for v in template.variables])
 
+    @app.post("/api/intake/{name}/submit")
+    def intake_submit(name: str, body: IntakeSubmitIn) -> IntakeSubmitOut:
+        """The counterparty's ONLY write: create an intake matter.
+
+        Deliberately narrower than POST /api/matters (which sits behind auth):
+        the template is pinned to the intake link, the status is pinned to
+        'intake', the matter id is derived server-side, and the answers must
+        belong to this questionnaire and stay a sane size.
+        """
+        template, _ = load(name)
+        known = {v.name for v in template.variables}
+        unknown = sorted(set(body.answers) - known)
+        if unknown:
+            raise HTTPException(422, "unknown questionnaire variable(s): "
+                                     + ", ".join(unknown))
+        for key, value in body.answers.items():
+            if isinstance(value, str) and len(value) > MAX_ANSWER_CHARS:
+                raise HTTPException(422, f"answer {key!r} exceeds "
+                                         f"{MAX_ANSWER_CHARS} characters")
+        pending = sum(1 for m in matter_mod.list_matters(ws)
+                      if m.status == "intake")
+        if pending >= MAX_PENDING_INTAKE:
+            raise HTTPException(429, "the intake queue is full — please "
+                                     "contact the firm directly")
+        matter_id = (f"{name}-{skill_mod.slugify(body.counterparty)[:24].strip('-')}"
+                     f"-{date.today().isoformat()}")
+        try:
+            matter = matter_mod.open_matter(ws, matter_id, name, body.answers,
+                                            body.counterparty, status="intake")
+        except ValueError as e:
+            raise HTTPException(409, str(e)) from None
+        return IntakeSubmitOut(id=matter.id)
+
     # -------------------------------------------------------------- export --
 
     @app.post("/api/export-docx")
@@ -709,9 +831,14 @@ def app_from_env() -> FastAPI:
 
         TB_WORKSPACE   workspace directory (default: ./examples)
         TB_READ_ONLY   any non-empty value serves the read-only public demo
+        TB_AUTH        "user:password" — require HTTP Basic auth on everything
+                       except the counterparty intake surface (needs TLS in
+                       front; see create_app)
 
-    Run: uvicorn --factory template_builder.server:app_from_env
+    Run single-process: uvicorn --factory template_builder.server:app_from_env
+    (build jobs and the duplicate-name guard are in-memory, per-process).
     """
     import os
     return create_app(os.environ.get("TB_WORKSPACE", "examples"),
-                      read_only=bool(os.environ.get("TB_READ_ONLY")))
+                      read_only=bool(os.environ.get("TB_READ_ONLY")),
+                      auth=os.environ.get("TB_AUTH") or None)

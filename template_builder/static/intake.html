@@ -135,16 +135,15 @@ document.getElementById("submit").addEventListener("click", async () => {
     else answers[v.name] = v.type === "number" ? Number(el.value) : el.value;
   }
   if (missing.length) { notice("err", `Please answer: ${missing[0]}`); return; }
-  const id = `${templateName}-${counterparty.toLowerCase().replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "").slice(0, 24)}-${new Date().toISOString().slice(0, 10)}`;
   const button = document.getElementById("submit");
   button.disabled = true;  // a double-click must not race two submissions
   let res;
   try {
-    res = await fetch("/api/matters", {
+    // the dedicated counterparty endpoint: the server pins the template and
+    // the intake status, and derives the matter reference itself
+    res = await fetch(`/api/intake/${encodeURIComponent(templateName)}/submit`, {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, template: templateName, counterparty, answers,
-                             status: "intake" }),
+      body: JSON.stringify({ counterparty, answers }),
     });
   } catch {
     button.disabled = false;
@@ -163,9 +162,10 @@ document.getElementById("submit").addEventListener("click", async () => {
     }
     return;
   }
+  const out = await res.json();
   document.getElementById("q").style.display = "none";
   button.style.display = "none";
-  notice("ok", `Thank you — your matter reference is ${id}. The legal team has your draft.`);
+  notice("ok", `Thank you — your matter reference is ${out.id}. The legal team has your draft.`);
 });
 
 init();

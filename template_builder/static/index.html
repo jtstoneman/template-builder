@@ -51,7 +51,7 @@
   }
   ::selection { background: rgba(207, 112, 64, 0.32); }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    header, nav.tabs, .panel, .tcard, .clause, dialog#report-dialog { background: #fdf8ee; }
+    header, nav.tabs, .panel, .tcard, .clause, dialog#report-dialog, dialog#ask-dialog { background: #fdf8ee; }
   }
 
   header {
@@ -276,18 +276,26 @@
   .doc-clause.edited .dhead h3::after { content: " •"; color: var(--err-ink); }
   .empty { color: var(--muted); text-align: center; padding: 60px 0; font-size: 14px; }
 
-  dialog#report-dialog {
+  dialog#report-dialog, dialog#ask-dialog {
     max-width: 860px; width: 90vw; max-height: 84vh;
     border: 1px solid var(--glass-edge); border-radius: 14px; padding: 26px 30px;
     background: rgba(255, 252, 246, 0.94); color: var(--ink);
     -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
     box-shadow: 0 30px 60px -24px rgba(43, 26, 15, 0.45);
   }
-  dialog#report-dialog::backdrop {
+  dialog#report-dialog::backdrop, dialog#ask-dialog::backdrop {
     background: rgba(43, 26, 15, 0.35);
     -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
   }
   dialog#report-dialog pre { white-space: pre-wrap; font-family: var(--mono); font-size: 12px; line-height: 1.6; }
+
+  /* the one decision dialog behind approve / resolve / close / ingest */
+  dialog#ask-dialog { max-width: 460px; }
+  #ask-dialog strong { font-size: 15px; }
+  #ask-dialog .ask-body { color: var(--muted); font-size: 13px; margin: 8px 0 14px; }
+  #ask-dialog .field label { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 4px; }
+  #ask-dialog textarea { min-height: 68px; resize: vertical; }
+  #ask-dialog .ask-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
 
   /* escalation inbox + matters */
   .esc {
@@ -446,6 +454,18 @@
     <pre id="report-body"></pre>
   </dialog>
 
+  <dialog id="ask-dialog">
+    <form id="ask-form">
+      <strong id="ask-title"></strong>
+      <p class="ask-body" id="ask-body"></p>
+      <div id="ask-fields"></div>
+      <div class="ask-actions">
+        <button class="btn" type="button" id="ask-cancel">Cancel</button>
+        <button class="btn primary" type="submit" id="ask-submit">Confirm</button>
+      </div>
+    </form>
+  </dialog>
+
 <script>
 "use strict";
 const $ = (id) => document.getElementById(id);
@@ -483,6 +503,66 @@ function banner(kind, text, items) {
   el.className = `notice ${kind}`;
   el.innerHTML = esc(text) +
     (items && items.length ? `<ul>${items.map((i) => `<li>${esc(String(i))}</li>`).join("")}</ul>` : "");
+}
+
+// The one decision dialog. fields: {name, label, type: text|textarea|select|
+// checkbox, options?, placeholder?, required?}. Resolves to the collected
+// values, or null on cancel/Esc — callers treat null as "do nothing".
+function ask({ title, body = "", fields = [], submit = "Confirm" }) {
+  const dlg = $("ask-dialog");
+  $("ask-title").textContent = title;
+  $("ask-body").textContent = body;
+  $("ask-body").style.display = body ? "" : "none";
+  $("ask-submit").textContent = submit;
+  const host = $("ask-fields");
+  host.innerHTML = "";
+  for (const f of fields) {
+    const id = `ask-f-${esc(f.name)}`;
+    const wrap = document.createElement("div");
+    if (f.type === "checkbox") {
+      wrap.className = "q bool";
+      wrap.innerHTML = `<input type="checkbox" id="${id}">
+        <label class="q-label" for="${id}">${esc(f.label)}</label>`;
+    } else if (f.type === "select") {
+      wrap.className = "field";
+      wrap.innerHTML = `<label for="${id}">${esc(f.label)}</label>
+        <select id="${id}">${f.options.map((o) =>
+          `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join("")}</select>`;
+    } else {
+      wrap.className = "field";
+      const el = f.type === "textarea"
+        ? `<textarea id="${id}" placeholder="${esc(f.placeholder || "")}"></textarea>`
+        : `<input type="text" id="${id}" placeholder="${esc(f.placeholder || "")}">`;
+      wrap.innerHTML = `<label for="${id}">${esc(f.label)}</label>${el}`;
+    }
+    host.appendChild(wrap);
+  }
+  return new Promise((resolve) => {
+    const form = $("ask-form");
+    const done = (values) => { cleanup(); dlg.close(); resolve(values); };
+    const onSubmit = (e) => {
+      e.preventDefault();
+      const values = {};
+      for (const f of fields) {
+        const el = $(`ask-f-${f.name}`);
+        values[f.name] = f.type === "checkbox" ? el.checked : el.value.trim();
+        if (f.required && !values[f.name]) { el.focus(); return; }
+      }
+      done(values);
+    };
+    const onCancel = () => done(null);
+    const onEsc = (e) => { e.preventDefault(); done(null); };
+    function cleanup() {
+      form.removeEventListener("submit", onSubmit);
+      $("ask-cancel").removeEventListener("click", onCancel);
+      dlg.removeEventListener("cancel", onEsc);
+    }
+    form.addEventListener("submit", onSubmit);
+    $("ask-cancel").addEventListener("click", onCancel);
+    dlg.addEventListener("cancel", onEsc);
+    dlg.showModal();
+    host.querySelector("input[type=text], textarea, select")?.focus();
+  });
 }
 
 /* ----------------------------------------------------------------- views */
@@ -569,19 +649,27 @@ function renderMatters(matters) {
 }
 
 async function closeMatter(m) {
-  const agreed = confirm(`Close ${m.id}.\nOK = agreed (terms settled) · Cancel = abandoned`);
-  const by = prompt("Closing as (name/email):");
-  if (!by) return;
-  const why = prompt("Why? (journaled)") || "";
+  const v = await ask({
+    title: `Close ${m.id}`,
+    body: "Closing as agreed requires an empty escalation inbox for this matter.",
+    fields: [
+      { name: "status", label: "Outcome", type: "select", options: [
+        { value: "agreed", label: "Agreed — terms settled" },
+        { value: "abandoned", label: "Abandoned — negotiation ended" }] },
+      { name: "by", label: "Closing as (name/email)", required: true },
+      { name: "why", label: "Why? (journaled)", type: "textarea" },
+    ],
+    submit: "Close matter" });
+  if (!v) return;
   const res = await fetch(`/api/matters/${encodeURIComponent(m.id)}/close`, {
     method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ status: agreed ? "agreed" : "abandoned", by, why }),
+    body: JSON.stringify({ status: v.status, by: v.by, why: v.why }),
   });
   if (!res.ok) {
     banner("err", await readError(res));
     return;
   }
-  banner("ok", `${m.id} closed as ${agreed ? "agreed" : "abandoned"}`);
+  banner("ok", `${m.id} closed as ${v.status}`);
   await loadHome();
 }
 
@@ -591,12 +679,19 @@ async function uploadRound(matterId) {
   input.accept = ".docx,.txt,.md,.pdf";
   input.addEventListener("change", async () => {
     if (!input.files.length) return;
-    const negotiate = confirm("Run the playbook-gated negotiator on this round?\n" +
-      "(OK = negotiate: mature accepts auto-record, the rest escalates. " +
-      "Cancel = just diff the document.)");
+    const v = await ask({
+      title: "Ingest the returned document",
+      body: "The document is diffed clause-by-clause against this matter's " +
+        "rendered standard; every difference becomes an ask.",
+      fields: [{ name: "negotiate", type: "checkbox",
+        label: "Also run the playbook-gated negotiator — accepts within " +
+          "earned autonomy are auto-recorded, everything else escalates " +
+          "to the inbox" }],
+      submit: "Ingest round" });
+    if (!v) return;
     const form = new FormData();
     form.append("file", input.files[0]);
-    form.append("negotiate", negotiate ? "true" : "false");
+    form.append("negotiate", v.negotiate ? "true" : "false");
     banner("ok", "Ingesting the returned document…");
     let res;
     try {
@@ -660,15 +755,23 @@ function renderInbox(escalations) {
 }
 
 async function resolveEscalation(e, decision) {
-  const by = prompt(`Deciding as (name/email) — this requires ${e.requires}:`);
-  if (!by) return;
-  const why = prompt("Why? (journaled — this decision raises the clause's maturity)");
-  if (!why) return;
+  const v = await ask({
+    title: decision === "hold"
+      ? `Hold our standard — ${e.clause_id}`
+      : `Accept their text — ${e.clause_id}`,
+    body: `This decision requires ${e.requires}. It is journaled with your ` +
+      `rationale, raises the clause's maturity, and teaches the playbook.`,
+    fields: [
+      { name: "by", label: "Deciding as (name/email)", required: true },
+      { name: "why", label: "Why? (journaled rationale)", type: "textarea", required: true },
+    ],
+    submit: decision === "hold" ? "Hold standard" : "Accept theirs" });
+  if (!v) return;
   let res;
   try {
     res = await fetch(`/api/matters/${encodeURIComponent(e.matter)}/resolve`, {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ clause_id: e.clause_id, decision, by, why }),
+      body: JSON.stringify({ clause_id: e.clause_id, decision, by: v.by, why: v.why }),
     });
   } catch {
     banner("err", "Could not reach the server — nothing was recorded.");
@@ -679,7 +782,7 @@ async function resolveEscalation(e, decision) {
     return;
   }
   banner("ok", `${e.clause_id}: ${decision === "hold" ? "standard held" : "deviation recorded"} — ` +
-    `journaled by ${by}; maturity raised`);
+    `journaled by ${v.by}; maturity raised`);
   await loadHome();
 }
 
@@ -1004,10 +1107,16 @@ $("btn-validate").addEventListener("click", async () => {
 });
 
 $("btn-approve").addEventListener("click", async () => {
-  const by = prompt("Approve every clause at its current content hash.\nApprover name/email:");
-  if (!by) return;
+  const v = await ask({
+    title: "Approve this template",
+    body: "Approval signs every clause (and the questionnaire) at its " +
+      "current content hash. Any later edit marks the touched clause " +
+      "stale until it is re-approved.",
+    fields: [{ name: "by", label: "Approver (name/email)", required: true }],
+    submit: "Approve" });
+  if (!v) return;
   try {
-    const out = await api(t("/approve"), { by });
+    const out = await api(t("/approve"), { by: v.by });
     banner("ok", `Approved ${out.approved.length} item(s). Coverage: ` +
       `${out.certificate.configurations_tested}/${out.certificate.configurations_total} ` +
       `configurations (${out.certificate.exhaustive ? "exhaustive" : "sampled"}).`);

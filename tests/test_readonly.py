@@ -15,7 +15,7 @@ def client(tmp_path, template_dict):
 
 
 def test_config_reports_read_only(client):
-    assert client.get("/api/config").json() == {"read_only": True}
+    assert client.get("/api/config").json()["read_only"] is True
 
 
 def test_browsing_still_works(client):
@@ -49,6 +49,8 @@ def test_every_mutating_or_llm_endpoint_is_blocked(client):
         ("/api/matters/m/resolve", {"json": {"clause_id": "term",
                                              "decision": "hold", "by": "x", "why": "y"}}),
         ("/api/matters/m/close", {"json": {"status": "abandoned", "by": "x"}}),
+        ("/api/intake/nda/submit", {"json": {"counterparty": "X",
+                                             "answers": ANSWERS}}),
     ]
     for path, kwargs in blocked:
         res = client.post(path, **kwargs)

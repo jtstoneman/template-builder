@@ -675,11 +675,18 @@ def cmd_drift(args):
 
 
 def cmd_serve(args):
+    import os
+
     import uvicorn
 
     from .server import create_app
-    app = create_app(args.workspace)  # fails fast on a bad path
-    print(f"template-builder UI → http://{args.host}:{args.port}  (Ctrl-C to stop)")
+    auth = os.environ.get("TB_AUTH") or None
+    app = create_app(args.workspace, auth=auth)  # fails fast on a bad path
+    note = "  (HTTP Basic auth on; the intake surface stays open)" if auth else ""
+    print(f"template-builder UI → http://{args.host}:{args.port}  (Ctrl-C to stop){note}")
+    if auth and args.host not in ("127.0.0.1", "localhost", "::1"):
+        print("NOTE: Basic auth sends credentials with every request — put TLS "
+              "(a reverse proxy) in front of any non-localhost deployment.")
     uvicorn.run(app, host=args.host, port=args.port, log_level="warning")
     return 0
 

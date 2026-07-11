@@ -65,10 +65,41 @@ docker run -p 8000:8000 template-builder        # read-only demo of examples/
 
 On **Render**: New → Blueprint → point it at this repo; `render.yaml`
 provisions the free-tier service. The same image works on Fly.io, Railway or
-Heroku. To serve a private full-featured instance instead, unset
-`TB_READ_ONLY`, set `ANTHROPIC_API_KEY`, mount a workspace at
-`TB_WORKSPACE` — and put it behind your own authentication: the app itself
-has none, by design.
+Heroku.
+
+### Running it at the firm (a production checklist)
+
+A full-featured instance is the same image with three env vars flipped:
+
+```sh
+docker run -p 8000:8000 \
+  -e TB_READ_ONLY= -e ANTHROPIC_API_KEY=sk-ant-... \
+  -e TB_WORKSPACE=/data -v /srv/templates:/data \
+  -e TB_AUTH='firm:choose-a-long-passphrase' \
+  template-builder
+```
+
+- **Authentication** — `TB_AUTH="user:password"` requires HTTP Basic
+  credentials on every request (the browser prompts natively; `curl -u`
+  works). The only exception is the counterparty-facing intake surface:
+  the `/intake/<template>` page, its questionnaire, and its submit
+  endpoint — which is deliberately narrow (the server pins the template
+  and the `intake` status, derives the matter reference itself, and
+  rejects answers that don't belong to the questionnaire). Without
+  `TB_AUTH` the app trusts the network, which is only acceptable on
+  localhost.
+- **TLS** — Basic auth sends credentials with every request, so any
+  non-localhost deployment must sit behind a TLS reverse proxy (Caddy is
+  two lines; nginx works too). The container passes `--proxy-headers`.
+- **One process** — build jobs and the duplicate-name guard are held
+  in memory, so run a single uvicorn process per workspace (the default).
+  Scale by giving each practice group its own workspace and container.
+- **Backups** — the entire state is plain files in the workspace
+  (templates, journals, matters, skills). Snapshot the directory;
+  restoring it is copying it back.
+- **Headers** — every response carries a content-security policy,
+  `nosniff`, and frame-denial headers out of the box; there is nothing
+  to configure.
 
 ## Workflow
 
